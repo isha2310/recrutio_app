@@ -1,0 +1,1 @@
+export const API = 'https://recrutio.herokuapp.com/api'

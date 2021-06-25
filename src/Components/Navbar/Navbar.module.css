@@ -1,0 +1,14 @@
+.Navbar{
+    background-color: var(--purple1);
+    padding: 0;
+    padding-left: 40px;
+}
+.Logo{
+    color: whitesmoke;
+    font-size: 35px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.Logo:hover{
+    color: whitesmoke;
+    cursor: pointer;
+}

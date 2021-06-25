@@ -1,0 +1,14 @@
+.CardDiv{
+    display: flex;
+    border: 1px solid grey;
+    padding: 1em 1.7em;
+    margin: 1.5em;
+    position: relative;
+    text-transform: capitalize;
+}
+
+@media (max-width: 810px){
+    .CardDiv{
+        padding: 5px;
+    }
+}

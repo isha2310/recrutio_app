@@ -1,13 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { createStore, combineReducers, compose } from 'redux';
+import { Provider } from 'react-redux'
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import candidateReducer from './store/reducer/candidateReducer'
+import recruiterReducer from './store/reducer/recruiterReducer' 
+import userReducer from './store/reducer/userReducer'
+
+const rootReducer = combineReducers({
+  user: userReducer,
+  candidate: candidateReducer,
+  recruiter: recruiterReducer
+})
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+const store = createStore(rootReducer, composeEnhancers())
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,0 +1,80 @@
+.MainDiv{
+    width: 80vw;
+    margin: auto;
+    padding: 50px 30px;
+}
+
+.ProfileDiv{
+    border: 1px solid #bebebe;
+    border-radius: 15px;
+    color: #5a5959;
+    width: 100%;
+    padding: 10px 30px ;
+    background-color: white;
+    margin-top: 15px;
+    padding-bottom: 30px;
+}
+.Field{
+    border-bottom: 5px double grey;
+    padding: 10px 25px;
+}
+.FieldHead{
+    display: flex;
+    justify-content: space-between;
+}
+.Input{
+    width: 100%;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+}
+.Btn{
+    background-color: #d7d5ff;
+    border-radius: 5px;
+    padding: 0.2rem 1.2rem;
+    color: #5a5959;
+    margin: 2px;
+    border: 2px solid rgb(137, 131, 252);
+    text-transform: capitalize;
+}
+.Btn:hover, .Btn:active{
+    background-color: rgb(215, 213, 255);
+    filter: brightness(90%);
+    color: #5a5959;
+}
+.InputField{
+    width: 50%;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+}
+.Button{
+    padding: 5px 25px;
+    background-color: #3d3d3d;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid transparent;
+}
+.FaIcon{
+    font-size: 1.5em;
+    margin: 0.2em;
+}
+.FaIcon:hover{
+    cursor: pointer;
+}
+
+@media (max-width: 810px){
+    .MainDiv{
+        width: 100%;
+        padding: 25px 15px;
+    }
+    .ProfileDiv{
+        padding: 5px 5px ;
+    }
+    .Field{
+        padding: 10px 5px;
+    }
+}

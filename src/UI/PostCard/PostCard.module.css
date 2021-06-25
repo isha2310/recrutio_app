@@ -1,0 +1,35 @@
+.Post {
+    border: 1px solid grey;
+    padding: 1.2em;
+    margin: 1.2em;
+    border-radius: 10px;
+}
+.Info{
+    padding: 0 0.5em;
+}
+.Pic{
+    margin: 10px;    
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+}
+.Dark{
+    filter: brightness(10%);
+}
+.ModalS{
+    min-width: 65vw;
+    text-align: center;
+    border: 0
+}
+.Caption{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+.CarouselPic{
+    width: 63vw;
+    height: auto;
+}
+

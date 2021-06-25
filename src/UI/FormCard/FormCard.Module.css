@@ -1,0 +1,23 @@
+.Field{
+    background-color: white;
+    border: 1px solid grey;
+    border-radius: 15px;
+    padding: 15px 25px;
+}
+.FieldHead{
+    display: flex;
+    justify-content: space-between;
+}
+.FieldInfo{
+    width: 95%;
+    margin: 10px;
+    margin: auto;
+}
+.Input{
+    width: 100%;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+}
