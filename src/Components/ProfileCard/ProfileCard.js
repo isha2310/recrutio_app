@@ -14,10 +14,12 @@ import classes from "./ProfileCard.module.css";
 import { setCandidateDetailsToCart } from "../../store/action/action";
 import { updateCandidateDetails } from "../../apiCalls/Candidate";
 import UploadService from "../../services/file-upload.service";
+import { useHistory } from 'react-router-dom'
 
 const ProfileCard = (props) => {
   let arr = {};
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [name, setName] = useState();
   const [modalShow, setModalShow] = useState(false);
@@ -27,23 +29,39 @@ const ProfileCard = (props) => {
   const [file, setFile] = useState(undefined);
   const [perviewImage, setPreviewImage] = useState(undefined);
   const [image, setImage] = useState(ProfilePic);
+  const [candidate, setCandidate] = useState({})
+  const [user, setUser] = useState('Candidate')
 
   const canDetails = useSelector((state) => state.candidate);
 
   useEffect(() => {
-    setName(localStorage.getItem("rec-user"));
-    if (canDetails.candidate.bio) setBio(canDetails.candidate.bio);
-    if (canDetails.candidate.phnNumber)
-      setphnNumber(canDetails.candidate.phnNumber);
-    if (canDetails.candidate.address) setAddress(canDetails.candidate.address);
-    if (canDetails.candidate.snap) {
-      let im = `data:${canDetails.candidate.snap};base64,${Buffer.from(
-        canDetails.candidate.snap
+    if( canDetails.candidate ){
+      setCandidate(canDetails.candidate)
+      setUser('Candidate')
+    } 
+    if( props.details ) {
+      console.log(props.details)
+      setCandidate(props.details)
+      setUser(props.user)
+    }
+    setName(candidate.name );
+    if (candidate.bio) setBio(candidate.bio);
+    if (candidate.phnNumber)
+      setphnNumber(candidate.phnNumber);
+    if (candidate.address) setAddress(candidate.address);
+    
+  }, [canDetails, props.details, props.user]);
+
+  useEffect(() => {
+    console.log(candidate)
+    if (candidate.snap) {
+      let im = `data:${candidate.snap};base64,${Buffer.from(
+        candidate.snap
       ).toString("base64")}`;
       setImage(im);
       setPreviewImage(im);
     }
-  }, [canDetails]);
+  }, [candidate])
 
   const handleClose = () => {
     if (localStorage.getItem("rec") === "Candidate") {
@@ -114,12 +132,12 @@ const ProfileCard = (props) => {
             paddingTop: "10px",
           }}
         >
-          <h3 className={classes.Name}>{localStorage.getItem("rec-user")}</h3>
+          <h3 className={classes.Name}>{candidate.name}</h3>
           <h5
             style={{ textAlign: "center", marginBottom: 0 }}
             className={classes.Bio}
           >
-            {canDetails.candidate.bio || "Add something about yourself"} &nbsp;
+            {candidate.bio || (props.details ? '' : "Add something about yourself")} &nbsp;
           </h5>
         </div>
         <div
@@ -133,7 +151,7 @@ const ProfileCard = (props) => {
           className="d-none d-sm-block"
         >
           <h3 >Contact Details</h3>
-          {localStorage.getItem("rec") === "Candidate" ? (
+          {user === "Candidate" ? (
             <div >
               <div style={{ display: "flex", margin: 0, padding: 0 }}>
                 <FontAwesomeIcon
@@ -142,29 +160,29 @@ const ProfileCard = (props) => {
                 />
                 &nbsp;
                 <p style={{ textTransform: "lowercase", margin: 0 }}>
-                  {canDetails.candidate.email}
+                  {candidate.email}
                 </p>
               </div>
-              {canDetails.candidate.phnNumber !== "" ? (
+              {candidate.phnNumber && candidate.phnNumber !== "" ? (
                 <div style={{ display: "flex", margin: 0, padding: 0 }}>
                   <FontAwesomeIcon
                     icon={faPhone}
                     style={{ color: "#5a5959", height: "1.5em" }}
                   />
                   &nbsp;
-                  <p style={{ margin: 0 }}>{canDetails.candidate.phnNumber}</p>
+                  <p style={{ margin: 0 }}>{candidate.phnNumber}</p>
                 </div>
               ) : (
                 ""
               )}
-              {canDetails.candidate.address !== "" ? (
+              { candidate.address && candidate.address !== "" ? (
                 <div style={{ display: "flex", margin: 0, padding: 0 }}>
                   <FontAwesomeIcon
                     icon={faMapMarkerAlt}
                     style={{ color: "#5a5959", height: "1.5em" }}
                   />
                   &nbsp;
-                  <p style={{ margin: 0 }}>{canDetails.candidate.address}</p>
+                  <p style={{ margin: 0 }}>{candidate.address}</p>
                 </div>
               ) : (
                 ""
@@ -174,13 +192,27 @@ const ProfileCard = (props) => {
             ""
           )}
         </div>
-        <button
+        { !props.details ? 
+          <button
           type="button"
           style={{ border: 0, backgroundColor: "white", alignSelf: "flex-end" }}
           onClick={() => setModalShow(true)}
-        >
+          >
           <FontAwesomeIcon icon={faEdit} style={{ color: "#5a5959" }} />
         </button>
+          : 
+          <button
+          type="button"
+          style={{ border: 0, backgroundColor: "white", alignSelf: "flex-end" }}
+          onClick={() => history.push({
+            pathname: '/messenger',
+            state: {senderId:localStorage.getItem('rec-id') , receiverId: candidate._id }
+          }) }
+          >
+          <FontAwesomeIcon icon={faEnvelope} style={{ color: "#5a5959", fontSize: '1.2em' }} />
+        </button>
+        }
+        
 
         <Modal
           show={modalShow}
@@ -260,7 +292,6 @@ const ProfileCard = (props) => {
       </div>
       <div className={"d-block d-sm-none "+ classes.Contact} >
         <h5 >Contact Details</h5>
-        {localStorage.getItem("rec") === "Candidate" ? (
           <div >
             <div style={{ display: "flex", margin: 0, padding: 0 }}>
               <FontAwesomeIcon
@@ -269,37 +300,34 @@ const ProfileCard = (props) => {
               />
               &nbsp;
               <p style={{ textTransform: "lowercase", margin: 0 }}>
-                {canDetails.candidate.email}
+                {candidate.email}
               </p>
             </div>
-            {canDetails.candidate.phnNumber !== "" ? (
+            {candidate.phnNumber !== "" ? (
               <div style={{ display: "flex", margin: 0, padding: 0 }}>
                 <FontAwesomeIcon
                   icon={faPhone}
                   style={{ color: "#5a5959", height: "1.5em" }}
                 />
                 &nbsp;
-                <p style={{ margin: 0 }}>{canDetails.candidate.phnNumber}</p>
+                <p style={{ margin: 0 }}>{candidate.phnNumber}</p>
               </div>
             ) : (
               ""
             )}
-            {canDetails.candidate.address !== "" ? (
+            {candidate.address !== "" ? (
               <div style={{ display: "flex", margin: 0, padding: 0 }}>
                 <FontAwesomeIcon
                   icon={faMapMarkerAlt}
                   style={{ color: "#5a5959", height: "1.5em" }}
                 />
                 &nbsp;
-                <p style={{ margin: 0 }}>{canDetails.candidate.address}</p>
+                <p style={{ margin: 0 }}>{candidate.address}</p>
               </div>
             ) : (
               ""
             )}
           </div>
-        ) : (
-          ""
-        )}
       </div>
     </React.Fragment>
   );

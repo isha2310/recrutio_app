@@ -4,11 +4,12 @@ import classes from "./PostCard.module.css";
 import { Image, Transformation } from 'cloudinary-react';
 import Carousel from "react-bootstrap/Carousel";
 import { getCandidateById } from "../../apiCalls/Candidate";
+import { useHistory } from "react-router-dom";
 
 const PostCard = (props) => {
   let snaps = props.info.snaps;
   let tech = props.info.technologies.join(", ");
-
+  let history = useHistory();
   const [modalShow, setModalShow] = useState(false);
   const [index, setIndex] = useState(0);
 
@@ -19,7 +20,13 @@ const PostCard = (props) => {
   const openProfile =() => {
     getCandidateById(props.info.candidateId)
     .then((res) => {
-      console.log(res)
+      if(!res.error){
+        console.log(res)
+        history.push({
+          pathname: '/viewProfile',
+          state : { user: 'Candidate' , data: res.candidate }
+        })
+      }
     })
     .catch((e) => console.log(e))    
   }

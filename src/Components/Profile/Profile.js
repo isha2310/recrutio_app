@@ -16,7 +16,6 @@ import {
 import DetailCard from "../../UI/DetailCard/DetailCard";
 import FormCard from "../../UI/FormCard/FormCard";
 import Badge from "react-bootstrap/Badge";
-import Button from "react-bootstrap/Button";
 import { skillArray } from "../../DataAsset/skillArray";
 
 const Profile = (props) => {
