@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCandidateDetailsToCart } from "../../store/action/action";
 import { getAllPosts, getBlogs } from "../../apiCalls/Candidate";
 import PostCard from "../../UI/PostCard/PostCard";
+import {Form} from 'react-bootstrap'
 
 const user = localStorage.getItem('rec')
 
@@ -30,6 +31,8 @@ const Timeline = (props) => {
 
   const canDetails = useSelector((state) => state.candidate);
 
+  
+
   useEffect(() => {
     console.log('hey', user)
     let query = ''
@@ -39,14 +42,11 @@ const Timeline = (props) => {
         query = canDetails.candidate.skills[n]
         console.log(query, n)
       }
-      fetch(`https://www.googleapis.com/customsearch/v1?key=${encodeURIComponent(process.env.REACT_APP_KEY)}&cx=${encodeURIComponent(process.env.REACT_APP_CX)}&q=${encodeURIComponent(query)}&filter=blogs&num=5`, {
-        method: 'GET',
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Request-Headers": "Access-Control-Allow-Origin"
-        }
+      getBlogs(query)
+      .then((res) => {
+        console.log(res.items)
+        setBlogs(res.items)
       })
-      .then((res) => console.log(res))
       .catch((e) => console.log(e))
     }
   },[])
@@ -62,7 +62,6 @@ const Timeline = (props) => {
       .then((res) => {
         if (res.status !== 401) {
           setAllPost(res);
-          console.log(res);
         }
       })
       .catch((e) => console.log(e));

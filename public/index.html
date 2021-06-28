@@ -21,20 +21,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <script>
-      function start() {
-        gapi.client.init({
-          'apiKey': '...'
-        })
-      };
-
-      function loadClient() {
-        gapi.load('client', start);
-      }
-    </script>
-    <script async defer src="https://apis.google.com/js/api.js"
-      onload="this.onload=function(){};loadClient()"
-      onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
     <title>React App</title>
   </head>
   <body>

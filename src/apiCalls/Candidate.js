@@ -71,10 +71,17 @@ export const getAllPosts = () => {
 }
 
 export const getBlogs = (query) => {
-  return fetch(`https://www.googleapis.com/customsearch/v1?key=${process.env.REACT_APP_KEY}&cx=${process.env.REACT_APP_CX}&q=${query}&filter=blogs&num=5`, {
-    method: 'GET',
-    headers: {
-      "Access-Control-Allow-Origin": "*"
-    }
+  return fetch(`https://www.googleapis.com/customsearch/v1?key=${process.env.REACT_APP_KEY}&cx=${process.env.REACT_APP_CX}&q=${encodeURIComponent(query)}&filter=blogs&num=5`, {
+    method: 'GET'
   })
+  .then((res) => res.json())
+  .catch((e) => console.log(e))
+}
+
+export const getAllCandidate = () => {
+  return fetch(`${API}/allCandidates`, {
+    method: "GET"
+  })
+  .then((res) => res.json())
+  .catch((e) => console.log(e))
 }

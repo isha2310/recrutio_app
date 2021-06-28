@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import classes from "./PostCard.module.css";
 import { Image, Transformation } from 'cloudinary-react';
 import Carousel from "react-bootstrap/Carousel";
+import { getCandidateById } from "../../apiCalls/Candidate";
 
 const PostCard = (props) => {
   let snaps = props.info.snaps;
@@ -15,9 +16,17 @@ const PostCard = (props) => {
     setIndex(selectedIndex);
   };
 
+  const openProfile =() => {
+    getCandidateById(props.info.candidateId)
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((e) => console.log(e))    
+  }
+
   return (
     <div className={classes.Post}>
-      <h6>{props.info.candidateName}</h6>
+      <h6 onClick={openProfile} className={classes.Name} >{props.info.candidateName}</h6>
       <div className={classes.Info}>
         <p className={classes.Caption}>{props.info.caption}</p>
         {snaps.length > 0 ? (
@@ -120,3 +129,10 @@ export default PostCard;
 // let im = `data:${snap};base64,${Buffer.from(snap).toString(
 //   "base64"
 // )}`;
+
+//AIzaSyBFQeDFMj6qJCrHAf0Y3AS7kNog3GeF7jE
+
+//<script async src="https://cse.google.com/cse.js?cx=8741a51d534251f49"></script>
+//<div class="gcse-search"></div>
+
+//https://www.googleapis.com/customsearch/v1?key=AIzaSyBFQeDFMj6qJCrHAf0Y3AS7kNog3GeF7jE&cx=8741a51d534251f49&q=javascript&filter=blogs&num=5

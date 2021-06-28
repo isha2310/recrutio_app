@@ -2,13 +2,42 @@
     background-color: var(--purple1);
     padding: 0;
     padding-left: 40px;
+    display: flex;
+    justify-content: flex-start;
 }
 .Logo{
     color: whitesmoke;
     font-size: 35px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    flex: 2;
 }
 .Logo:hover{
     color: whitesmoke;
     cursor: pointer;
+}
+.Searchbar{
+    flex: 6;
+    align-self: center;
+}
+.Search{
+    width: 500px;
+    background-color: white;
+    padding-left: 5px;
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+}
+.SearchInput{
+    border: none;
+    margin-left: 10px;
+    width: 80%;
+    margin-bottom: 3px;
+    border-bottom: 2px solid gray;
+}
+.SearchInput:focus {
+    outline: none;
+}
+.Settings{
+    flex: 1;
 }

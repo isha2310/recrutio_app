@@ -13,6 +13,12 @@
     height: auto;
     cursor: pointer;
 }
+.Name{
+    cursor: pointer;
+}
+.Name:hover{
+    text-decoration: underline;
+}
 .Dark{
     filter: brightness(10%);
 }
