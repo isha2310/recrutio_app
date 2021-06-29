@@ -1,5 +1,6 @@
 .Navbar{
-    background-color: var(--purple1);
+    /* background-color: var(--purple1); */
+    background-color: #3b3737;
     padding: 0;
     padding-left: 40px;
     display: flex;
