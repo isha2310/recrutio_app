@@ -206,7 +206,7 @@ const ProfileCard = (props) => {
           style={{ border: 0, backgroundColor: "white", alignSelf: "flex-end" }}
           onClick={() => history.push({
             pathname: '/messenger',
-            state: {senderId:localStorage.getItem('rec-id') , receiverId: candidate._id }
+            state: {senderId:localStorage.getItem('rec-id') , receiverId: candidate._id , user:canDetails}
           }) }
           >
           <FontAwesomeIcon icon={faEnvelope} style={{ color: "#5a5959", fontSize: '1.2em' }} />

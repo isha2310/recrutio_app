@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import classes from "./Navbar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faCog } from "@fortawesome/free-solid-svg-icons";
+import {faSearch, faCog, faEnvelopeOpen} from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
   let history = useHistory();
@@ -35,7 +35,15 @@ const Navbar = () => {
           <input placeholder="Search for the users with skills ex: Python " className={classes.SearchInput} />
         </div>
       </div>
-      <FontAwesomeIcon icon={faCog} style={{color: 'white', fontSize: "1.5em"}} className={classes.Settings} />
+        <FontAwesomeIcon  onClick={(e) => {
+            e.preventDefault();
+            history.push("/messenger");
+        }} icon={faEnvelopeOpen} style={{color: 'white', fontSize: "1.5em"}} className={classes.Settings} />
+      <FontAwesomeIcon  onClick={(e) => {
+          e.preventDefault();
+          history.push("/profile");
+      }} icon={faCog} style={{color: 'white', fontSize: "1.5em"}} className={classes.Settings} />
+
     </nav>
   );
 };
