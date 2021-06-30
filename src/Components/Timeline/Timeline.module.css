@@ -27,9 +27,9 @@
 }
 .PostFile {
   border: 1px solid grey;
-  background-color: #bebebe;
+  background-color: #3b3737;
   padding: 20px;
-  color: grey;
+  color: white;
   text-align: center;
 }
 .Pics {
@@ -48,7 +48,7 @@
 }
 .PostBtn {
   padding: 3px 15px;
-  background: #bebebe;
+  color: white;
   border: 1px solid grey;
   border-radius: 5px;
 }

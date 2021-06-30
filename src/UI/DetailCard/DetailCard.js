@@ -14,7 +14,7 @@ import {
   setRecruiterDetailsToCart,
 } from "../../store/action/action";
 import { updateCandidateDetails } from "../../apiCalls/Candidate";
-import classes from './DetailCard.module.css'
+import classes from "./DetailCard.module.css";
 
 const DetailCard = (props) => {
   const canDetails = useSelector((state) => state.candidate);
@@ -93,9 +93,7 @@ const DetailCard = (props) => {
   };
 
   return (
-    <div
-      className={classes.CardDiv}
-    >
+    <div className={classes.CardDiv}>
       <FontAwesomeIcon
         icon={props.type === "experience" ? faUserTie : faGraduationCap}
         size="3x"
@@ -108,16 +106,24 @@ const DetailCard = (props) => {
         <br />
         {fromd} {current ? " - Present" : to ? ` - ${to}` : ""}
       </div>
-      <FontAwesomeIcon
-        icon={faPencilAlt}
-        style={{ right: "40px", position: "absolute" }}
-        onClick={() => setModalShow(true)}
-      />
-      <FontAwesomeIcon
-        icon={faTrash}
-        style={{ right: "20px", position: "absolute" }}
-        onClick={handleDelete}
-      />
+      {!props.edit && props.edit !== false ? (
+        <FontAwesomeIcon
+          icon={faPencilAlt}
+          style={{ right: "40px", position: "absolute" }}
+          onClick={() => setModalShow(true)}
+        />
+      ) : (
+        ""
+      )}
+      {!props.edit && props.edit !== false ? (
+        <FontAwesomeIcon
+          icon={faTrash}
+          style={{ right: "20px", position: "absolute" }}
+          onClick={handleDelete}
+        />
+      ) : (
+        ""
+      )}
 
       <Modal
         show={modalShow}

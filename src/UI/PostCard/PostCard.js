@@ -52,21 +52,11 @@ const PostCard = (props) => {
                     }}
                   />
                 );
-              } else if (index === 1) {
-                return (
-                  <img
-                    key={index}
-                    src={snap}
-                    alt="..."
-                    className={classes.Pic + " "+ classes.Dark }
-                    onClick={(e) => {
-                      setModalShow(true)
-                      setIndex(index)
-                    }}
-                  />
-                );
               } else {
-                return (<p>...more</p>);
+                return (<p key={index} style={{float: 'right', color: 'blue', cursor: 'pointer', width: 'fit-content' }} onClick={(e) => {
+                  setModalShow(true)
+                  setIndex(index)
+                }} >...more</p>);
               }
             })}
           </div>

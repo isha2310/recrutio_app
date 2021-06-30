@@ -1,6 +1,9 @@
 .App {
   text-align: center;
-  
-  background-color: rgb(235, 235, 235);
+  background-color: #d4d4d4;
+  /* background-color: rgb(235, 235, 235); */
 }
 
+button{
+  background-color: #3b3737;
+}
