@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import classes from "./Navbar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faCog } from "@fortawesome/free-solid-svg-icons";
+import {faSearch, faCog, faEnvelope} from "@fortawesome/free-solid-svg-icons";
 import {NavLink} from 'react-router-dom'
 import Dropdown from "react-bootstrap/Dropdown";
 
@@ -40,6 +40,14 @@ const Navbar = () => {
           />
         </div>
       </div>
+        <FontAwesomeIcon
+            icon={faEnvelope}
+            style={{ color: "white", fontSize: "1.5em" }}
+            className={classes.Settings}
+            onClick={()=>{
+            history.push('./messenger')}
+            }
+        />
       <Dropdown>
         <Dropdown.Toggle style={{backgroundColor: 'transparent', border: 'none'}} id="dropdown-basic">
         <FontAwesomeIcon
