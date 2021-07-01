@@ -43,3 +43,16 @@ export const updateRecruiterDetails = (details) => {
     .then((res) => res.json())
     .catch((e) => console.log(e));
 };
+
+export const getRecruiterById = (id) => {
+  return fetch(`${API}/recuiter/${id}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+  })
+    .then((res) => res.json())
+    .catch((e) => console.log(e));
+};

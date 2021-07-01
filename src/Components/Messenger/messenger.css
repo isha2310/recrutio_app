@@ -4,7 +4,7 @@
 }
 
 .chatMenu {
-    flex: 3.5;
+    flex: 3;
 }
 
 .chatMenuInput {
@@ -13,9 +13,27 @@
     border: none;
     border-bottom: 1px solid gray;
 }
-
+.chatName{
+    text-transform: capitalize;
+    font-size: large;
+    height: 40px;
+    font-weight: 500;
+    border-bottom: 1px solid gray;
+    /* background-color: rgb(245, 243, 243); */
+}
+.chatName:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.chatNameImg{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
 .chatBox {
-    flex: 5.5;
+    flex: 6;
 }
 
 .chatBoxWrapper {
@@ -28,7 +46,7 @@
 .chatBoxTop {
     height: 100%;
     overflow-y: scroll;
-    padding-right: 10px;
+    padding: 5px;
 }
 
 .chatBoxBottom {

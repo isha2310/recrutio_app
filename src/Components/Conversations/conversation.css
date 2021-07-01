@@ -20,6 +20,7 @@
 
 .conversationName {
     font-weight: 500;
+    text-transform: capitalize;
 }
 
 @media screen and (max-width: 768px) {

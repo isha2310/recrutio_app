@@ -42,3 +42,6 @@
 .Settings{
     flex: 1;
 }
+.Dropdown1:active{
+    outline: none;
+}

@@ -8,6 +8,7 @@ import ProfilePic from "../ProfileCard/profile.png";
 
 export default function Conversation({ conversation, currentUser }) {
     const [user, setUser] = useState(null);
+    const [dp, setDp] = useState(ProfilePic)
     useEffect(() => {
         const friendId = conversation.members.find((m) => m !== currentUser._id);
 
@@ -17,6 +18,12 @@ export default function Conversation({ conversation, currentUser }) {
             try {
                 const res = await axios(`${API}/getCandidateById/` + friendId);
                 console.log("Freind",res.data)
+                if(res.data.candidate.snap && res.data.candidate.snap !== [] ){
+                    let im = `data:${res.data.candidate.snap};base64,${Buffer.from(
+                        res.data.candidate.snap
+                      ).toString("base64")}`;
+                      setDp(im)
+                } 
                 setUser(res.data);
             } catch (err) {
                 console.log(err);
@@ -30,7 +37,7 @@ export default function Conversation({ conversation, currentUser }) {
         <div className="conversation">
             <img
                 className="conversationImg"
-                src= {ProfilePic}
+                src= {dp}
 
                 alt=""
             />

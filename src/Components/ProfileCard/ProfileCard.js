@@ -27,7 +27,7 @@ const ProfileCard = (props) => {
   const [phnNumber, setphnNumber] = useState("");
   const [address, setAddress] = useState("");
   const [file, setFile] = useState(undefined);
-  const [perviewImage, setPreviewImage] = useState(undefined);
+  const [perviewImage, setPreviewImage] = useState(ProfilePic);
   const [image, setImage] = useState(ProfilePic);
   const [candidate, setCandidate] = useState({})
   const [user, setUser] = useState('Candidate')
@@ -44,13 +44,16 @@ const ProfileCard = (props) => {
       setCandidate(props.details)
       setUser(props.user)
     }
+  }, [canDetails, props.details, props.user]);
+
+  useEffect(() =>{
+    
     setName(candidate.name );
     if (candidate.bio) setBio(candidate.bio);
     if (candidate.phnNumber)
       setphnNumber(candidate.phnNumber);
     if (candidate.address) setAddress(candidate.address);
-    
-  }, [canDetails, props.details, props.user]);
+  },[candidate])
 
   useEffect(() => {
     console.log(candidate)
@@ -59,6 +62,7 @@ const ProfileCard = (props) => {
         candidate.snap
       ).toString("base64")}`;
       setImage(im);
+      localStorage.setItem('rec-snap', im)
       setPreviewImage(im);
     }
   }, [candidate])

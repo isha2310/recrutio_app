@@ -55,6 +55,25 @@ const Profile = (props) => {
     }
   }, [resp, dispatch2]);
 
+  useEffect(() => {
+    let user = localStorage.getItem("rec");
+    if(user === 'Candidate'){
+      if(props.candidate.candidate.snap && props.candidate.candidate.snap !== [] ){
+        let im = `data:${props.candidate.candidate.snap};base64,${Buffer.from(
+          props.candidate.candidate.snap
+        ).toString("base64")}`;
+        localStorage.setItem('rec-snap', im)
+      }
+    } else {
+      if(props.recruiter.recruiter.snap && props.recruiter.recruiter.snap !== [] ){
+        let im = `data:${props.recruiter.recruiter.snap};base64,${Buffer.from(
+          props.recruiter.recruiter.snap
+        ).toString("base64")}`;
+        localStorage.setItem('rec-snap', im)
+      }
+    }
+  }, [])
+
   const handleSkill = (e) => {
     e.preventDefault();
     console.log(skill);
