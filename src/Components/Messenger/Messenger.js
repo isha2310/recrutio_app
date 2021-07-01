@@ -32,7 +32,7 @@ export default function Messenger(props) {
   const secondUserId = location?.state?.receiverId || null;
 
   useEffect(() => {
-    socket.current = io("ws://localhost:4000");
+    socket.current = io("ws://recrutio.herokuapp.com");
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
