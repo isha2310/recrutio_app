@@ -6,6 +6,7 @@ export const LoginCandidate = (candidate) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
     },
     body: JSON.stringify(candidate),
   })
@@ -21,6 +22,7 @@ export const SignupCandidate = (candidate) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
     },
     body: JSON.stringify(candidate),
   })
@@ -37,6 +39,7 @@ export const updateCandidateDetails = (details) => {
       Accept: "application/json",
       Authorization: bearer,
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
     },
     body: JSON.stringify(details),
   })
