@@ -4,7 +4,7 @@ import Navbar from "../Navbar/Navbar";
 import { connect } from "react-redux";
 import LoginPic from "./Interview-Free-PNG-Image.png";
 import "./Login.css";
-import { LoginCandidate, SignupCandidate } from "../../apiCalls/Candidate";
+import { getCandidateById, LoginCandidate, SignupCandidate } from "../../apiCalls/Candidate";
 import { LoginRecruiter, SignupRecruiter } from "../../apiCalls/Recruiter";
 import {
   setCandidateDetailsToCart,
@@ -41,6 +41,16 @@ const Login = (props) => {
           localStorage.setItem("rec-id", res.candidate._id);
           localStorage.setItem("rec-token", res.token);
           history.push("/profile");
+          getCandidateById(res.candidate._id)
+          .then((res) => {
+            if (res.error) {
+              console.log(res.error);
+            } else {
+              console.log(res);
+              props.dispatch(setCandidateDetailsToCart(res));
+            }
+          })
+          .catch((e) => console.log(e))
         })
         .catch((err) => console.log(err));
     } else {

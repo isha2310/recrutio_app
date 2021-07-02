@@ -1,7 +1,7 @@
 import Navbar from "../Navbar/Navbar";
 import classes from "./Timeline.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { skillArray } from "../../DataAsset/skillArray";
@@ -10,9 +10,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCandidateDetailsToCart } from "../../store/action/action";
 import { getAllPosts, getBlogs } from "../../apiCalls/Candidate";
 import PostCard from "../../UI/PostCard/PostCard";
-import {Form} from 'react-bootstrap'
+import BlogsCard from "../../UI/BlogsCard/BlogsCard";
 
-const user = localStorage.getItem('rec')
+const user = localStorage.getItem("rec");
 
 const Timeline = (props) => {
   const [images, setImages] = useState([]);
@@ -25,31 +25,41 @@ const Timeline = (props) => {
   const [tech, setTech] = useState("");
   const [allPost, setAllPost] = useState([]);
   const [relevantPost, setRelevantPost] = useState([]);
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setBlogs] = useState([]);
 
   const dispatch = useDispatch();
 
   const canDetails = useSelector((state) => state.candidate);
 
-  
-
   useEffect(() => {
-    console.log('hey', user)
-    let query = ''
-    if(user === 'Candidate'){
-      if(canDetails.candidate.skills){
-        let n = Math.floor(Math.random() * (canDetails.candidate.skills.length - 0))
-        query = canDetails.candidate.skills[n]
-        console.log(query, n)
+    console.log("hey", user);
+    let query = "";
+    if (user === "Candidate") {
+      if (canDetails.candidate.skills) {
+        if (canDetails.candidate.skills.length > 0) {
+          let n = Math.floor(
+            Math.random() * (canDetails.candidate.skills.length - 0)
+          );
+          query = canDetails.candidate.skills[n];
+          console.log(query, n);
+        }
+      } else {
+        setTimeout(function () {
+          query = "trending";
+        }, 1000);
       }
-      getBlogs(query)
-      .then((res) => {
-        console.log(res.items)
-        setBlogs(res.items)
-      })
-      .catch((e) => console.log(e))
+      if (query !== "") {
+        getBlogs(query)
+          .then((res) => {
+            console.log(res.items);
+            setBlogs(res.items);
+          })
+          .catch((e) => {
+            setBlogs([]);
+          });
+      }
     }
-  },[])
+  }, [canDetails.candidate.skills]);
 
   useEffect(() => {
     setTechnologies([]);
@@ -70,19 +80,20 @@ const Timeline = (props) => {
   useEffect(() => {
     let arr1 = [...allPost];
     let arr2 = canDetails.candidate.skills;
-    if(arr2 ){
-    let arr3 = [];
-    for (let i = 0; i < arr1.length; i++) {
-      let ele = arr1[i];
-      if (arr2.some((skill) => ele.technologies.includes(skill))) {
-        arr3.push(ele);
+    if (arr2) {
+      if (arr2.length > 0) {
+        let arr3 = [];
+        for (let i = 0; i < arr1.length; i++) {
+          let ele = arr1[i];
+          if (arr2.some((skill) => ele.technologies.includes(skill))) {
+            arr3.push(ele);
+          }
+          setRelevantPost(arr3);
+        }
       }
-    }
-    setRelevantPost(arr3);
     } else {
-      setRelevantPost(arr1)
+      setRelevantPost(arr1);
     }
-    
   }, [allPost, canDetails.candidate]);
 
   const uploadPic = (e) => {
@@ -132,24 +143,46 @@ const Timeline = (props) => {
   return (
     <div style={{ backgroundColor: "#f3f3f3", minHeight: "100vh" }}>
       <Navbar />
-      <div style={{ display: "flex", margin: "auto"}}>
+      <div style={{ display: "flex", margin: "auto" }}>
         <div className={classes.PostsArea + " " + classes.Post}>
-          <textarea
-            className={classes.Post}
-            placeholder="Want to share something? "
-            onClick={(e) => setModalShow(true)}
-            style={{ width: "100%" }}
-          />
-          {relevantPost.length > 0 ? (
-            <div>
-              { relevantPost.sort((a,b) => new Date(b.date) - new Date(a.date))
-                .map((post, index) => (
-                <PostCard info={post} key={index} />
-              ))}
-            </div>
-          ) : (
-            ""
-          )}
+          <div className={classes.Post + " " + classes.AllPosts}>
+            <textarea
+              className={classes.Post}
+              placeholder="Want to share something? "
+              onClick={(e) => setModalShow(true)}
+              style={{ width: "100%" }}
+            />
+            {relevantPost.length > 0 ? (
+              <div>
+                {relevantPost
+                  .sort((a, b) => new Date(b.date) - new Date(a.date))
+                  .map((post, index) => (
+                    <PostCard info={post} key={index} />
+                  ))}
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+          <div
+            className={
+              "d-none d-md-block d-lg-block " +
+              classes.BlogArea +
+              " " +
+              classes.Post
+            }
+          >
+            {blogs !== [] && (
+              <>
+                <p style={{ fontSize: "1.2em", color: "#007bff" }}>
+                  <FontAwesomeIcon icon={faChartLine} /> Trending
+                </p>
+                {blogs.map((blog, index) => (
+                  <BlogsCard link={blog.link} title={blog.title} key={index} />
+                ))}
+              </>
+            )}
+          </div>
         </div>
         <Modal
           show={modalShow}
@@ -246,7 +279,7 @@ const Timeline = (props) => {
                         >
                           {tech}
                         </p>
-                      ))} 
+                      ))}
                       (click to remove)
                     </div>
                   ) : (
@@ -274,7 +307,17 @@ const Timeline = (props) => {
                   placeholder="Ex: JavaScript"
                   onChange={(e) => setTech(e.target.value)}
                 />
-                <datalist id="skills">
+                <datalist
+                  id="skills"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    let arr = [...technologies];
+                    arr.push(tech);
+                    setTechnologies(arr);
+                    setTech("");
+                    e.target.reset();
+                  }}
+                >
                   {skillArray.map((val, index) => (
                     <option value={val} key={index} />
                   ))}

@@ -30,7 +30,7 @@ const Navbar = () => {
       >
         Recrutio
       </a>
-      <div className={classes.Searchbar}>
+      <div className={"d-none d-md-block d-lg-block "+classes.Searchbar}>
         <div className={classes.Search}>
           <FontAwesomeIcon
             icon={faSearch}

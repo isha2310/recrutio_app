@@ -45,3 +45,8 @@
 .Dropdown1:active{
     outline: none;
 }
+@media (max-width: 810px) {
+    .Logo{
+        font-size: 30px;
+    }
+}

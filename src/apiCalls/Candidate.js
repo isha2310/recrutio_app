@@ -74,7 +74,7 @@ export const getAllPosts = () => {
 }
 
 export const getBlogs = (query) => {
-  return fetch(`https://www.googleapis.com/customsearch/v1?key=${process.env.REACT_APP_KEY}&cx=${process.env.REACT_APP_CX}&q=${encodeURIComponent(query)}&filter=blogs&num=5`, {
+  return fetch(`https://www.googleapis.com/customsearch/v1/siterestrict?key=${process.env.REACT_APP_KEY}&cx=${process.env.REACT_APP_CX}&q=${encodeURIComponent(query)}&filter=blogs&num=5`, {
     method: 'GET'
   })
   .then((res) => res.json())

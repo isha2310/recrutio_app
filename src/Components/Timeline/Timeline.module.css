@@ -2,13 +2,24 @@
   margin: auto;
   margin-top: 20px;
   border-radius: 10px;
-  width: 60vw;
+  width: 80vw;
+  display: flex;
 }
 .Post {
   border: 1px solid grey;
   padding: 1em 1.7em;
   background-color: white;
   margin-bottom: 20px;
+  border-radius: 10px;
+  height: fit-content;
+}
+.AllPosts{
+  width: 75%;
+}
+.BlogArea{
+  margin-left: 1.7em;
+  position: sticky;
+  top: 1em;
 }
 .Textarea {
   border: 1px solid #ccc;
@@ -57,7 +68,8 @@
 }
 @media (max-width: 810px) {
   .Post {
-    width: 78vw;
+    padding: 1em 0.6em;
+    width: 100%;
   }
   .Pics {
     max-width: 250px;
@@ -67,5 +79,12 @@
   }
   .PostBtn {
     margin-top: 5px;
+  }
+  .PostsArea{
+    display: block;
+    width: 92vw ;
+  }
+  .BlogArea{
+    margin-left: 0;
   }
 }

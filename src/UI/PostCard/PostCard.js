@@ -100,7 +100,7 @@ const PostCard = (props) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Body style={{ backgroundColor: "#3f3f3f"}}>
+        <Modal.Body style={{ backgroundColor: "#3f3f3f"}} className={classes.Modalbody} >
           <Carousel activeIndex={index} onSelect={handleSelect} >
             {snaps.map((snap, index) => {
               

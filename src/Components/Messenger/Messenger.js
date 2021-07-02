@@ -74,7 +74,7 @@ export default function Messenger(props) {
         setFrndDp(im);
       }
     };
-    if (currentChat !== null) {
+    if (currentChat && currentChat !== null) {
       setImg();
     }
   }, [currentChat]);
@@ -89,8 +89,11 @@ export default function Messenger(props) {
           if (res1.data == null) {
             const body = { senderId: firstUserId, receiverId: secondUserId };
             const res = await axios.post(`${API}/conversation/`, body);
+            setCurrentChat(res.data)
             // setConversations(res.data);
           }
+          console.log(res1)
+          setCurrentChat(res1.data)
         }
         const res = await axios.get(`${API}/conversation/` + firstUserId);
         socket.current.emit("addUser", firstUserId);
@@ -189,7 +192,8 @@ export default function Messenger(props) {
           <div className="chatMenuWrapper">
             <input placeholder="Search for friends" className="chatMenuInput" />
             {conversations !== null &&
-              conversations.map((c, index) => (
+              conversations
+              .map((c, index) => (
                 <div key={index} onClick={() => setCurrentChat(c)}>
                   <Conversation conversation={c} currentUser={canDetails} />
                 </div>

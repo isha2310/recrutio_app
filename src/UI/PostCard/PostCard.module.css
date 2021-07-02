@@ -1,7 +1,7 @@
 .Post {
     border: 1px solid grey;
     padding: 1.2em;
-    margin: 1.2em;
+    margin-bottom: 1.2em;
     border-radius: 10px;
 }
 .Info{
@@ -15,6 +15,7 @@
 }
 .Name{
     cursor: pointer;
+    text-transform: capitalize;
 }
 .Name:hover{
     text-decoration: underline;
@@ -39,3 +40,21 @@
     height: auto;
 }
 
+@media (max-width: 810px) {
+    .ModalS{
+        min-width: 96vw;
+    }
+    .CarouselPic{
+        width: 89vw;
+    }
+    .Post{
+        padding: 1em 0.6em;
+    }
+    .Modalbody{
+        padding: 0.8rem;
+    }
+    .Pic{
+        margin: 0px;
+        margin-bottom: 5px;
+    }
+}

@@ -19,41 +19,9 @@ import Badge from "react-bootstrap/Badge";
 import { skillArray } from "../../DataAsset/skillArray";
 
 const Profile = (props) => {
-  //const user = useSelector(state => state.user)
-  const dispatch2 = useDispatch();
 
   const [field, setField] = useState(0);
-  const [resp, setResp] = useState({});
   const [skill, setSkill] = useState("");
-
-  useEffect(() => {
-    let user = localStorage.getItem("rec");
-    if (user === "Candidate") {
-      const id = localStorage.getItem("rec-id");
-      getCandidateById(id)
-        .then((res) => {
-          if (res.error) {
-            console.log(res.error);
-          } else {
-            console.log(res);
-            setResp(res);
-            // dispatch2(setCandidateDetailsToCart(res))
-          }
-        })
-        .catch((e) => console.log(e));
-    } else {
-      //setDetails(recDetails)
-    }
-    //console.log(details)
-  }, []);
-
-  useEffect(() => {
-    console.log(resp);
-    let user = localStorage.getItem("rec");
-    if (user === "Candidate") {
-      dispatch2(setCandidateDetailsToCart(resp));
-    }
-  }, [resp, dispatch2]);
 
   useEffect(() => {
     let user = localStorage.getItem("rec");
