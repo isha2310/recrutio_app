@@ -211,8 +211,8 @@ const Timeline = (props) => {
                     <FontAwesomeIcon
                       icon={faPlus}
                       style={{
-                        color: "grey",
-                        border: "3px solid grey",
+                        color: "#bebebe",
+                        border: "3px solid #bebebe",
                         borderRadius: "50%",
                         fontSize: "1.2rem",
                       }}

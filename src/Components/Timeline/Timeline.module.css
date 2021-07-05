@@ -6,7 +6,7 @@
   display: flex;
 }
 .Post {
-  border: 1px solid grey;
+  border: 1px solid #bebebe;
   padding: 1em 1.7em;
   background-color: white;
   margin-bottom: 20px;
@@ -37,10 +37,10 @@
   z-index: -1;
 }
 .PostFile {
-  border: 1px solid grey;
-  background-color: #3b3737;
+  border: 1px solid #bebebe;
+  background-color: #5c5c5c;
   padding: 20px;
-  color: white;
+  color: #bebebe;
   text-align: center;
 }
 .Pics {
@@ -50,7 +50,7 @@
 }
 .Tech {
   margin: 3px;
-  border-right: 1px solid grey;
+  border-right: 1px solid #bebebe;
   padding-right: 3px;
 }
 .PostInput {
@@ -60,7 +60,7 @@
 .PostBtn {
   padding: 3px 15px;
   color: white;
-  border: 1px solid grey;
+  border: 1px solid #bebebe;
   border-radius: 5px;
 }
 .PostBtn:hover {

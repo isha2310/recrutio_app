@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter, Route } from 'react-router-dom'
-import Login from './Components/Login/Login';
+//import Login from './Components/Login/Login';
 import Profile from './Components/Profile/Profile';
 import Timeline from './Components/Timeline/Timeline';
 import ViewProfile from './UI/ViewProfile/ViewProfile';
@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { getCandidateById } from './apiCalls/Candidate';
 import { connect, useDispatch } from 'react-redux';
 import { setCandidateDetailsToCart } from './store/action/action';
+import Login from './Components/Login2/Login'
 
 const App = () => {
 

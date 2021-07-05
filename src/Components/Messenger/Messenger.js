@@ -21,6 +21,7 @@ export default function Messenger(props) {
   const [frndDp, setFrndDp] = useState(Pic);
   const [frndName, setFrndName] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [update, setUpdate] = useState(true)
   const socket = useRef();
   const scrollRef = useRef();
   const location = useLocation();
@@ -80,36 +81,51 @@ export default function Messenger(props) {
   }, [currentChat]);
 
   useEffect(() => {
-    const getConversations = async () => {
-      try {
-        if (secondUserId !== null) {
-          const res1 = await axios.get(
-            `${API}/conversation/find/` + firstUserId + "/" + secondUserId
-          );
-          if (res1.data == null) {
-            const body = { senderId: firstUserId, receiverId: secondUserId };
-            const res = await axios.post(`${API}/conversation/`, body);
-            setCurrentChat(res.data)
-            // setConversations(res.data);
+    if(update === true){
+      const getConversations = async () => {
+        try {
+          if (secondUserId !== null) {
+            const res1 = await axios.get(
+              `${API}/conversation/find/` + firstUserId + "/" + secondUserId
+            );
+            if (res1.data == null) {
+              const body = { senderId: firstUserId, receiverId: secondUserId };
+              const res = await axios.post(`${API}/conversation/`, body);
+              setCurrentChat(res.data)
+              // setConversations(res.data);
+            }
+            console.log(res1)
+            setCurrentChat(res1.data)
           }
-          console.log(res1)
-          setCurrentChat(res1.data)
+          if(firstUserId){
+            const res = await axios.get(`${API}/conversation/` + firstUserId);
+            socket.current.emit("addUser", firstUserId);
+            socket.current.on("getUsers", (users) => {
+              console.log(users);
+            });
+            let convo = res.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+            console.log('......',convo)
+            setConversations(convo);
+            setCurrentChat(convo[0])
+          }
+            // setOnlineUsers(
+            //     user.followings.filter((f) => users.some((u) => u.firstUserId === f))
+            // );
+        } catch (err) {
+          console.log(err);
         }
-        const res = await axios.get(`${API}/conversation/` + firstUserId);
-        socket.current.emit("addUser", firstUserId);
-        socket.current.on("getUsers", (users) => {
-          console.log(users);
-          // setOnlineUsers(
-          //     user.followings.filter((f) => users.some((u) => u.firstUserId === f))
-          // );
-        });
-        setConversations(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getConversations();
-  }, [firstUserId]);
+      };
+      getConversations();
+    }
+  }, [firstUserId, update]);
+
+  useEffect(() =>{
+    if(update === true){
+      let convo = conversations.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+      setConversations(convo)
+      setUpdate(false)
+    }
+  }, [update])
 
   useEffect(() => {
     const getMessages = async () => {
@@ -130,7 +146,6 @@ export default function Messenger(props) {
       text: newMessage,
       conversationId: currentChat._id,
     };
-
     const receiverId = currentChat.members.find(
       (member) => member !== firstUserId
     );
@@ -143,6 +158,8 @@ export default function Messenger(props) {
 
     try {
       const res = await axios.post(`${API}/message`, message);
+      const res1 = await axios.patch(`${API}/conversationUpdate/${message.conversationId}`)
+      setUpdate(true)
       setMessages([...messages, res.data]);
       setNewMessage("");
     } catch (err) {
