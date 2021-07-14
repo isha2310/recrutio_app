@@ -1,4 +1,4 @@
-import ProfilePic from "./profile.png";
+import ProfilePic from "../Assets/profile.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
@@ -31,14 +31,17 @@ const ProfileCard = (props) => {
   const [image, setImage] = useState(ProfilePic);
   const [candidate, setCandidate] = useState({})
   const [user, setUser] = useState('Candidate')
+  const [workDetails, setWorkDetails] = useState('')
 
   const canDetails = useSelector((state) => state.candidate);
 
   useEffect(() => {
-    if( canDetails.candidate ){
-      setCandidate(canDetails.candidate)
-      setUser('Candidate')
-    } 
+    if(localStorage.getItem('rec-user') === 'Candidate' ){
+      if( canDetails.candidate ){
+        setCandidate(canDetails.candidate)
+        setUser('Candidate')
+      } 
+    }
     if( props.details ) {
       console.log(props.details)
       setCandidate(props.details)
@@ -54,6 +57,19 @@ const ProfileCard = (props) => {
       setphnNumber(candidate.phnNumber);
     if (candidate.address) setAddress(candidate.address);
   },[candidate])
+
+  useEffect(() => {
+    if(user === 'Recruiter'){
+      let wd = ''
+      if(candidate.position && candidate.position!=='' ){
+        wd = candidate.position + " "
+      }
+      if(candidate.company && candidate.company!=='' ){
+        wd = wd + "At "+ candidate.company
+      }
+      setWorkDetails(wd)
+    }
+  },[user, candidate])
 
   useEffect(() => {
     console.log(candidate)
@@ -138,10 +154,16 @@ const ProfileCard = (props) => {
         >
           <h3 className={classes.Name}>{candidate.name}</h3>
           <h5
-            style={{ textAlign: "center", marginBottom: 0 }}
+            style={{marginBottom: 0 }}
             className={classes.Bio}
           >
-            {candidate.bio || (props.details ? '' : "Add something about yourself")} &nbsp;
+          {
+            user === 'Candidate' ? 
+            (candidate.bio || (props.details ? '' : "Add something about yourself")) 
+            :
+            workDetails
+          }
+          &nbsp;
           </h5>
         </div>
         <div
@@ -155,7 +177,7 @@ const ProfileCard = (props) => {
           className="d-none d-sm-block"
         >
           <h3 >Contact Details</h3>
-          {user === "Candidate" ? (
+          
             <div >
               <div style={{ display: "flex", margin: 0, padding: 0 }}>
                 <FontAwesomeIcon
@@ -192,9 +214,6 @@ const ProfileCard = (props) => {
                 ""
               )}
             </div>
-          ) : (
-            ""
-          )}
         </div>
         { !props.details ? 
           <button

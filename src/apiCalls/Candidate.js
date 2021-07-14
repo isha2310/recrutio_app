@@ -88,3 +88,51 @@ export const getAllCandidate = () => {
   .then((res) => res.json())
   .catch((e) => console.log(e))
 }
+
+export const logoutCandidate = () => {
+  let token = localStorage.getItem("rec-token")
+  let body = {token}
+  let bearer = "Bearer " + token;
+  return fetch(`${API}/candidate/logout`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: bearer,
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    },
+    body: JSON.stringify(body)
+  })
+  .then((res) => res)
+  .catch((e) => console.log(e))
+}
+
+export const deleteCanPost = (id) => {
+  let bearer = "Bearer " + localStorage.getItem("rec-token");
+
+  return fetch(`${API}/candidate/post/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: bearer,
+      "Content-Type": "application/json"
+    }
+  })
+    .then((res) => res.json())
+    .catch((e) => console.log(e));
+};
+
+export const applyForJob = (postId) => {
+  let bearer = "Bearer " + localStorage.getItem("rec-token");
+
+  return fetch(`${API}/applyJob/${postId}`, {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      Authorization: bearer,
+      "Content-Type": "application/json"
+    }
+  })
+    .then((res) => res.json())
+    .catch((e) => console.log(e));
+};

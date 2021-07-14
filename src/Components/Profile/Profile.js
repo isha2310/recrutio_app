@@ -6,17 +6,15 @@ import classes from "./Profile.module.css";
 import { useEffect, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import {
-  getCandidateById,
   updateCandidateDetails,
 } from "../../apiCalls/Candidate";
 import {
-  setCandidateDetailsToCart,
-  setRecruiterDetailsToCart,
+  setCandidateDetailsToCart
 } from "../../store/action/action";
 import DetailCard from "../../UI/DetailCard/DetailCard";
 import FormCard from "../../UI/FormCard/FormCard";
 import Badge from "react-bootstrap/Badge";
-import { skillArray } from "../../DataAsset/skillArray";
+import { skillArray } from "../Assets/skillArray";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import PostCard from '../../UI/PostCard/PostCard'
@@ -33,7 +31,7 @@ const Profile = (props) => {
     if (user === "Candidate") {
       if (
         props.candidate.candidate.snap &&
-        props.candidate.candidate.snap !== []
+        props.candidate.candidate.snap.length !== 0
       ) {
         let im = `data:${props.candidate.candidate.snap};base64,${Buffer.from(
           props.candidate.candidate.snap
@@ -42,20 +40,10 @@ const Profile = (props) => {
       }
       if (
         props.candidate.posts &&
-        props.candidate.posts !== []
+        props.candidate.posts.length !== 0
       ) {
         console.log(props.candidate.posts)
         setPosts([...props.candidate.posts])
-      }
-    } else {
-      if (
-        props.recruiter.recruiter.snap &&
-        props.recruiter.recruiter.snap !== []
-      ) {
-        let im = `data:${props.recruiter.recruiter.snap};base64,${Buffer.from(
-          props.recruiter.recruiter.snap
-        ).toString("base64")}`;
-        localStorage.setItem("rec-snap", im);
       }
     }
   }, [props.candidate.posts, props.candidate.candidate.snap ]);

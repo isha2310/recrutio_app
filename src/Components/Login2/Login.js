@@ -3,30 +3,71 @@ import "./Login.css";
 import {
   getCandidateById,
   LoginCandidate,
-  SignupCandidate,
+  SignupCandidate
 } from "../../apiCalls/Candidate";
-import { LoginRecruiter, SignupRecruiter } from "../../apiCalls/Recruiter";
+import { LoginRecruiter, SignupRecruiter,getRecruiterById } from "../../apiCalls/Recruiter";
 import {
   setCandidateDetailsToCart,
   setRecruiterDetailsToCart,
   setUser,
 } from "../../store/action/action";
 import { useHistory } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
+import Alert from "react-bootstrap/Alert";
 
 const Login = (props) => {
   let history = useHistory();
+  let dispatch = props.dispatch
 
   if (localStorage.getItem("rec-token")) {
-    history.push("/profile");
+    if(localStorage.getItem("rec") === 'Candidate'){
+      history.push("/profile");
+      getCandidateById(localStorage.getItem("rec-id"))
+      .then((res) => {
+        if (res.error) {
+          console.log(res.error);
+        } else {
+          dispatch(setCandidateDetailsToCart(res));
+        }
+      })
+      .catch((e) => console.log(e))
+    } else {
+      history.push('/timeline_r')
+      getRecruiterById(localStorage.getItem("rec-id"))
+        .then((res) => {
+          if (res.error) {
+            console.log(res.error);
+          } else {
+            console.log(res)
+            dispatch(setRecruiterDetailsToCart(res))
+          }
+        })
+        .catch((e) => console.log(e))
+    }
   }
-
-  useEffect(() => localStorage.setItem("rec", "Candidate"), []);
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signup, SetSignup] = useState(false);
-  const [user, setUserN] = useState("Candidate");
+  const [user, setUserN] = useState('');
+  const [show, setShow] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  useEffect(() => {
+    if(!localStorage.getItem('rec')){
+      localStorage.setItem("rec", "Candidate")
+      setUserN('Candidate')
+    } else {
+      setUserN(localStorage.getItem('rec'))
+    }
+  }, []);
+
+  useEffect(() => {
+    if(user !== ''){
+      dispatch(setUser(user))
+    }
+  },[user, dispatch])
 
   const handleLoginClick = () => {
     if (user === "Candidate") {
@@ -34,6 +75,11 @@ const Login = (props) => {
         .then((res) => {
           console.log(res);
           if (res.error) {
+            setShow(true);
+            setMsg(res.error);
+            setTimeout(() => {
+              setShow(false)
+            }, 5000);
             return res;
           }
           props.dispatch(setCandidateDetailsToCart(res));
@@ -58,6 +104,11 @@ const Login = (props) => {
         .then((res) => {
           console.log(res);
           if (res.error) {
+            setShow(true);
+            setMsg(res.error);
+            setTimeout(() => {
+              setShow(false)
+            }, 5000);
             return res;
           }
           props.dispatch(setRecruiterDetailsToCart(res));
@@ -76,6 +127,11 @@ const Login = (props) => {
         .then((res) => {
           console.log(res);
           if (res.error) {
+            setShow(true);
+            setMsg(res.error);
+            setTimeout(() => {
+              setShow(false)
+            }, 5000);
             return res;
           }
           props.dispatch(setCandidateDetailsToCart(res));
@@ -92,12 +148,18 @@ const Login = (props) => {
         .then((res) => {
           console.log(res);
           if (res.error) {
+            setShow(true);
+            setMsg(res.error);
+            setTimeout(() => {
+              setShow(false)
+            }, 5000);
             return res;
           }
           props.dispatch(setRecruiterDetailsToCart(res));
           localStorage.setItem("rec-user", username);
           localStorage.setItem("rec-token", res.token);
-          history.push("/profile");
+          localStorage.setItem("rec-id", res.recruiter._id);
+          history.push("/timeline_r");
         })
         .catch((err) => {
           console.log(err);
@@ -111,7 +173,7 @@ const Login = (props) => {
   };
 
   return (
-    <div className="LoginPage" >
+    <div className="LoginPage">
       <div className={"Div2"}>
         {user === "Candidate" ? (
           <button
@@ -147,17 +209,13 @@ const Login = (props) => {
           {!signup ? "Sign Up" : "Login"}
         </button>
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: 'space-around',
-          width: '50vw',
-          marginTop: "15vh",
-        }}
-      >
-        <div className="Div1" >
+      <div className="Div1">
+        <div>
           <h1 className={"Tagline"}>WELCOME TO THE PROFESSIONAL COMMUNITY</h1>
+
           <form
+            className={"Box"}
+            id="box"
             onSubmit={(e) => {
               e.preventDefault();
               if (!signup) {
@@ -167,41 +225,56 @@ const Login = (props) => {
               }
             }}
           >
-            <div className={"Box"} id="box">
-              {signup ? (
-                <input
-                  placeholder="USERNAME"
-                  className={"Input1"}
-                  required
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              ) : null}
+            {signup ? (
               <input
-                placeholder="EMAIL"
+                placeholder="USERNAME"
                 className={"Input1"}
                 required
-                type="email"
                 onChange={(e) => {
-                  setEmail(e.target.value);
+                  setUsername(e.target.value)
+                  setShow(false)
                 }}
+                autoFocus
               />
-              <input
-                placeholder="PASSWORD"
-                className={"Input1"}
-                required
-                type="password"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-              <button className={"LoginBtn"} type="submit">
-                {!signup ? "Login" : "Sign Up"}
-              </button>
-            </div>
+            ) : null}
+            <input
+              placeholder="EMAIL"
+              className={"Input1"}
+              required
+              type="email"
+              autoFocus
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setShow(false)
+              }}
+            />
+            <input
+              placeholder="PASSWORD"
+              className={"Input1"}
+              required
+              type="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setShow(false)
+              }}
+            />
+            <button className={"LoginBtn"} type="submit">
+              {!signup ? "Login" : "Sign Up"}
+            </button>
+            <Alert
+              variant="dark"
+              onClose={() => setShow(false)}
+              dismissible
+              show={show}
+              style={{ borderRadius: "10px" }}
+              transition={false}
+            >
+              {msg}
+            </Alert>
           </form>
         </div>
       </div>
     </div>
   );
 };
-export default Login;
+export default connect()(Login);

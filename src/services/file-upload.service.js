@@ -8,8 +8,13 @@ class FileUploadService {
     for (var pair of formData.entries()) {
       console.log(pair[0]+ ', ' + pair[1]); 
   }
+    let api = ''
+    if(localStorage.getItem('rec')==='Candidate')
+      api = `https://recrutio.herokuapp.com/api/candidate/snap`
+    else
+      api = `https://recrutio.herokuapp.com/api/recruiter/snap`
 
-    return fetch(`https://recrutio.herokuapp.com/api/candidate/snap`, {
+    return fetch(api, {
       method: "POST",
       headers: {
         Accept: "application/json",

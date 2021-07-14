@@ -3,8 +3,12 @@ import Modal from "react-bootstrap/Modal";
 import classes from "./PostCard.module.css";
 import { Image, Transformation } from 'cloudinary-react';
 import Carousel from "react-bootstrap/Carousel";
-import { getCandidateById } from "../../apiCalls/Candidate";
+import { deleteCanPost, getCandidateById } from "../../apiCalls/Candidate";
 import { useHistory } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { setCandidateDetailsToCart } from "../../store/action/action";
 
 const PostCard = (props) => {
   let snaps = props.info.snaps;
@@ -12,6 +16,8 @@ const PostCard = (props) => {
   let history = useHistory();
   const [modalShow, setModalShow] = useState(false);
   const [index, setIndex] = useState(0);
+
+  let dispatch = useDispatch()
 
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
@@ -24,11 +30,21 @@ const PostCard = (props) => {
         console.log(res)
         history.push({
           pathname: '/viewProfile',
-          state : { user: 'Candidate' , data: res.candidate }
+          state : { user: 'Candidate' , data: res.candidate, posts: res.posts }
         })
       }
     })
     .catch((e) => console.log(e))    
+  }
+
+  const deletePost = () => {
+   deleteCanPost(props.info._id)
+   .then((res) => {
+    if (res.status !== 400 || res.status !== 404){
+      dispatch(setCandidateDetailsToCart({posts: {...res.posts}}))
+    }
+   })
+   .catch((e) => console.log(e)) 
   }
 
   return (
@@ -92,6 +108,20 @@ const PostCard = (props) => {
           <b>Technologies used : </b> {tech}
         </p>
       </div>
+      { props.info.candidateId === localStorage.getItem('rec-id') && <button
+      type="button"
+      style={{
+        border: 0,
+        backgroundColor: "white",
+        float: "right",
+      }}
+    >
+      <FontAwesomeIcon
+        icon={faTrash}
+        style={{ float: "right" }}
+        onClick={deletePost}
+      />{" "}
+    </button> }
       <Modal
         show={modalShow}
         animation={false}
@@ -118,18 +148,3 @@ const PostCard = (props) => {
 };
 
 export default PostCard;
-
-
-// <div key={index} style={{position: 'relative'}}><img src={im} className={classes.Pic} style={{ filter: 'brightness(10%)'}} alt="..." /><div style={{position: 'absolute', top: '50%', left: '50%', color: 'grey'}}>+{snaps.length-1}</div></div>
-//                 );
-
-// let im = `data:${snap};base64,${Buffer.from(snap).toString(
-//   "base64"
-// )}`;
-
-//AIzaSyBFQeDFMj6qJCrHAf0Y3AS7kNog3GeF7jE
-
-//<script async src="https://cse.google.com/cse.js?cx=8741a51d534251f49"></script>
-//<div class="gcse-search"></div>
-
-//https://www.googleapis.com/customsearch/v1?key=AIzaSyBFQeDFMj6qJCrHAf0Y3AS7kNog3GeF7jE&cx=8741a51d534251f49&q=javascript&filter=blogs&num=5

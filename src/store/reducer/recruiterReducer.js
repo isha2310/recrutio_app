@@ -9,6 +9,9 @@ const reducer = ( state = initialState, action ) => {
                 ...state,
                 ...action.recruiter
             }
+        
+        case 'RESET_RECRUITER_DETAILS':
+            return initialState
 
         default: 
             break

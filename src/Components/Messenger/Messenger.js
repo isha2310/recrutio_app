@@ -9,7 +9,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { API } from "../../apiCalls/api";
 import { useSelector } from "react-redux";
-import Pic from "../ProfileCard/profile.png";
+import Pic from "../Assets/profile.png";
 import { getCandidateById } from "../../apiCalls/Candidate";
 import { getRecruiterById } from "../../apiCalls/Recruiter";
 

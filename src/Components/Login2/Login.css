@@ -1,6 +1,6 @@
 .LoginPage{
     height: 100vh;
-    background-image: url('./grey\ bg-02.jpeg');
+    background-image: url('./grey\ bg-01.jpeg');
     background-size: cover;
 }
 .Div2{
@@ -8,7 +8,7 @@
     justify-content: flex-start;
     font-size: 1.2rem;
     color: #e2e0e0;
-    padding-right: 5vw;
+    padding-left: 5vw;
     padding-top: 2vh; 
 }
 .NavBtn{
@@ -72,6 +72,10 @@
     color: white;
     padding: 10px;
     border-radius: 10px;
+    margin-bottom: 10px;
+}
+.LoginBtn:hover{
+    opacity: 0.9;
 }
 .ProfileBtn{
     border: none;
@@ -81,11 +85,49 @@
 .Selected{
     font-weight: bold;
 }
-
+.Div1{
+    display: flex;
+    justify-content: space-around;
+    width: 50vw;
+    margin-top: 15vh;
+}
 .Section{
     background-image: linear-gradient(to bottom, var(--purple), #d607c5);   
     position: relative;
     overflow: hidden;
     width: 100%;
     height: 100vh;
+}
+@media only screen and (max-width: 1100px) and (min-width: 766px){
+    .Div1{
+        width: 80vw;
+        display: block;
+    }
+    .Tagline{
+        width: 70%;
+        font-size: 2rem;
+        margin-left: 20px;
+    }
+    .Box{
+        margin: 20px;
+    }
+    #box{
+        width: 70%;
+    }
+}
+@media (max-width: 765px){
+    .Tagline{
+        font-size: 2em;
+        width: 90%;
+    }
+    .Div1{
+        width: 100vw;
+        display: block;
+    }
+    .Box{
+        margin: 20px;
+    }
+    #box{
+        width: 80%;
+    }
 }

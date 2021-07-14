@@ -45,13 +45,44 @@ export const updateRecruiterDetails = (details) => {
 };
 
 export const getRecruiterById = (id) => {
-  return fetch(`${API}/recuiter/${id}`, {
+  return fetch(`${API}/recruiter/${id}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
+  })
+    .then((res) => res.json())
+    .catch((e) => console.log('errr'));
+};
+
+export const jobPost = (details) => {
+  let bearer = "Bearer " + localStorage.getItem("rec-token");
+
+  return fetch(`${API}/recruiter/jobPost`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: bearer,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(details),
+  })
+    .then((res) => res.json())
+    .catch((e) => e.status);
+};
+
+export const deleteJobPost = (id) => {
+  let bearer = "Bearer " + localStorage.getItem("rec-token");
+
+  return fetch(`${API}/recruiter/jobPost/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: bearer,
+      "Content-Type": "application/json",
+    }
   })
     .then((res) => res.json())
     .catch((e) => console.log(e));

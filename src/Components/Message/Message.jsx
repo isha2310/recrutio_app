@@ -1,6 +1,6 @@
 import "./message.css";
 import { format } from "timeago.js";
-import Pic from '../ProfileCard/profile.png'
+import Pic from '../Assets/profile.png'
 import { useEffect, useState } from "react";
 
 export default function Message({ message, own, secondDp }) {

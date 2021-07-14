@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "./conversation.css";
 import {API} from "../../apiCalls/api";
-import ProfilePic from "../ProfileCard/profile.png";
+import ProfilePic from "../Assets/profile.png";
 
 
 

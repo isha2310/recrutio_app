@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartLine, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import { skillArray } from "../../DataAsset/skillArray";
+import { skillArray } from "../Assets/skillArray";
 import CandidatePost from "../../services/candidatepost.service";
 import { useDispatch, useSelector } from "react-redux";
 import { setCandidateDetailsToCart } from "../../store/action/action";
@@ -33,7 +33,7 @@ const Timeline = (props) => {
 
   useEffect(() => {
     console.log("hey", user);
-    let query = "";
+    let query = "trending";
     if (user === "Candidate") {
       if (canDetails.candidate.skills) {
         if (canDetails.candidate.skills.length > 0) {
@@ -164,25 +164,23 @@ const Timeline = (props) => {
               ""
             )}
           </div>
-          <div
-            className={
-              "d-none d-md-block d-lg-block " +
-              classes.BlogArea +
-              " " +
-              classes.Post
-            }
-          >
-            {blogs !== [] && (
-              <>
-                <p style={{ fontSize: "1.2em", color: "#007bff" }}>
-                  <FontAwesomeIcon icon={faChartLine} /> Trending
-                </p>
-                {blogs.map((blog, index) => (
-                  <BlogsCard link={blog.link} title={blog.title} key={index} />
-                ))}
-              </>
-            )}
-          </div>
+          {blogs.length !== 0 && (
+            <div
+              className={
+                "d-none d-md-block d-lg-block " +
+                classes.BlogArea +
+                " " +
+                classes.Post
+              }
+            >
+              <p style={{ fontSize: "1.2em", color: "#007bff" }}>
+                <FontAwesomeIcon icon={faChartLine} /> Trending
+              </p>
+              {blogs.map((blog, index) => (
+                <BlogsCard link={blog.link} title={blog.title} key={index} />
+              ))}
+            </div>
+          )}
         </div>
         <Modal
           show={modalShow}
@@ -247,6 +245,7 @@ const Timeline = (props) => {
                 <label htmlFor="repolink">Repository link (if any) :</label>
                 <br />
                 <input
+                  type="url"
                   className={classes.PostInput}
                   name="repolink"
                   placeholder="Ex: Your GitHub repository link"
@@ -256,10 +255,11 @@ const Timeline = (props) => {
                 <label htmlFor="link">Any other link (if any) :</label>
                 <br />
                 <input
+                  type="url"
                   className={classes.PostInput}
                   name="link"
                   placeholder="Ex: Any live link"
-                  onChange={(e) => setLink(e.ta)}
+                  onChange={(e) => setLink(e.target.value)}
                 />
                 <br />
                 <label>
@@ -309,6 +309,7 @@ const Timeline = (props) => {
                 />
                 <datalist
                   id="skills"
+                  required
                   onChange={(e) => {
                     e.preventDefault();
                     let arr = [...technologies];

@@ -23,6 +23,9 @@ const reducer = ( state = initialState, action ) => {
                 ...action.candidate
             }
 
+        case 'RESET_CANDIDATE_DETAILS':
+            return initialState
+
         default: 
             break
 
