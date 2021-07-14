@@ -87,3 +87,21 @@ export const deleteJobPost = (id) => {
     .then((res) => res.json())
     .catch((e) => console.log(e));
 };
+
+
+export const logoutRecruiter = () => {
+  let token = localStorage.getItem("rec-token")
+  let body = {token}
+  let bearer = "Bearer " + token;
+  return fetch(`${API}/recruiter/logout`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: bearer,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  })
+  .then((res) => res)
+  .catch((e) => console.log(e))
+}

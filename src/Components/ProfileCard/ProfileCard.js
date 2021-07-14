@@ -36,7 +36,8 @@ const ProfileCard = (props) => {
   const canDetails = useSelector((state) => state.candidate);
 
   useEffect(() => {
-    if(localStorage.getItem('rec-user') === 'Candidate' ){
+    if(localStorage.getItem('rec') === 'Candidate' ){
+      console.log(canDetails)
       if( canDetails.candidate ){
         setCandidate(canDetails.candidate)
         setUser('Candidate')
@@ -50,7 +51,7 @@ const ProfileCard = (props) => {
   }, [canDetails, props.details, props.user]);
 
   useEffect(() =>{
-    
+    console.log(candidate)
     setName(candidate.name );
     if (candidate.bio) setBio(candidate.bio);
     if (candidate.phnNumber)

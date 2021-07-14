@@ -6,8 +6,9 @@ import { NavLink } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import { getAllCandidate, logoutCandidate } from "../../apiCalls/Candidate";
 import { useDispatch } from "react-redux";
-import { resetCandidateDetailsToCart } from "../../store/action/action";
+import { resetCandidateDetailsToCart, resetRecruiterDetailsToCart } from "../../store/action/action";
 import { useState } from "react";
+import { logoutRecruiter } from "../../apiCalls/Recruiter";
 
 const Navbar = () => {
   let history = useHistory();
@@ -49,7 +50,8 @@ const Navbar = () => {
     } else if(num===2){
       history.push("/search")
     } else if (num === 3) {
-      logoutCandidate()
+      if(localStorage.getItem('rec') === 'Candidate'){
+        logoutCandidate()
         .then((res) => {
           if (res.status === 200) {
             localStorage.clear();
@@ -59,6 +61,18 @@ const Navbar = () => {
           console.log(res);
         })
         .catch((e) => console.log(e));
+      }
+      else{
+        logoutRecruiter()
+        .then((res) => {
+          if (res.status === 200) {
+            localStorage.clear();
+            history.push("/");
+            dispatch(resetRecruiterDetailsToCart())
+          }
+        })
+        .catch((e) => console.log(e) )
+      }
     }
   };
 

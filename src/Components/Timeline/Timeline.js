@@ -11,6 +11,8 @@ import { setCandidateDetailsToCart } from "../../store/action/action";
 import { getAllPosts, getBlogs } from "../../apiCalls/Candidate";
 import PostCard from "../../UI/PostCard/PostCard";
 import BlogsCard from "../../UI/BlogsCard/BlogsCard";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
 
 const user = localStorage.getItem("rec");
 
@@ -146,23 +148,28 @@ const Timeline = (props) => {
       <div style={{ display: "flex", margin: "auto" }}>
         <div className={classes.PostsArea + " " + classes.Post}>
           <div className={classes.Post + " " + classes.AllPosts}>
-            <textarea
-              className={classes.Post}
-              placeholder="Want to share something? "
-              onClick={(e) => setModalShow(true)}
-              style={{ width: "100%" }}
-            />
-            {relevantPost.length > 0 ? (
-              <div>
-                {relevantPost
-                  .sort((a, b) => new Date(b.date) - new Date(a.date))
-                  .map((post, index) => (
-                    <PostCard info={post} key={index} />
-                  ))}
-              </div>
-            ) : (
-              ""
-            )}
+            <Tabs defaultActiveKey="timeline" id="uncontrolled-tab-example">
+              <Tab eventKey="timeline" title="Timeline">
+                <textarea
+                  className={classes.Post}
+                  placeholder="Want to share something? "
+                  onClick={(e) => setModalShow(true)}
+                  style={{ width: "100%" }}
+                />
+                {relevantPost.length > 0 ? (
+                  <div>
+                    {relevantPost
+                      .sort((a, b) => new Date(b.date) - new Date(a.date))
+                      .map((post, index) => (
+                        <PostCard info={post} key={index} />
+                      ))}
+                  </div>
+                ) : (
+                  ""
+                )}
+              </Tab>
+              <Tab ></Tab>
+            </Tabs>
           </div>
           {blogs.length !== 0 && (
             <div
