@@ -47,7 +47,7 @@ const FormCard = (props) => {
     console.log(formState);
     let data = [];
     if (props.type === "experience") {
-      data = canDetails.candidate.experience;
+      if(canDetails.candidate.experience) data = canDetails.candidate.experience;
       // if(!props.field){
       //     data = data.filter((ele) => ele._id !== props.details._id)
       //     data.push({...propDetails, ...formState})
@@ -55,6 +55,7 @@ const FormCard = (props) => {
       //     data.push(formState)
       // }
     } else {
+      if(canDetails.candidate.education )
       data = canDetails.candidate.education;
     }
     if (!props.field) {
