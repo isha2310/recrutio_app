@@ -35,7 +35,6 @@ const ProfileIcon = (props) => {
       getCandidateById(props.info._id)
       .then((res) => {
         if(!res.error){
-          console.log(res)
           history.push({
             pathname: '/viewProfile',
             state : { user: 'Candidate' , data: res.candidate, posts: res.posts }

@@ -1,6 +1,5 @@
 import './App.css';
 import { BrowserRouter, Route } from 'react-router-dom'
-//import Login from './Components/Login/Login';
 import Profile from './Components/Profile/Profile';
 import Timeline from './Components/Timeline/Timeline';
 import ViewProfile from './UI/ViewProfile/ViewProfile';
@@ -13,6 +12,7 @@ import Login from './Components/Login2/Login'
 import { getRecruiterById } from './apiCalls/Recruiter';
 import TimelineR from './Components/TimelineRecruiter/TimelineR';
 import SearchPage from './Components/SearchPage/SearchPage';
+import AppliedJobs from './Components/AppliedJobs/AppliedJobs';
 
 const App = () => {
 
@@ -29,7 +29,6 @@ const App = () => {
         if (res.error) {
           console.log(res.error);
         } else {
-          console.log(res);
           dispatch(setCandidateDetailsToCart(res));
           setResp(res);
         }
@@ -42,7 +41,6 @@ const App = () => {
           if (res.error) {
             console.log(res.error);
           } else {
-            console.log(res)
             setResp(res);
             dispatch(setRecruiterDetailsToCart(res))
           }
@@ -52,20 +50,6 @@ const App = () => {
     }
   },[dispatch])
 
-  // useEffect(() => {
-  //   let user = localStorage.getItem("rec");
-  //   if(Object.keys(resp).length !== 0){
-  //     console.log(Object.keys(resp).length === 0)
-  //     if (user === "Candidate") {
-  //       console.log(resp)
-  //       dispatch(setCandidateDetailsToCart(resp));
-  //     } else if (user === 'Recruiter') {
-  //       console.log(resp)
-  //       dispatch(setRecruiterDetailsToCart(resp))
-  //     }
-  //   }
-  // }, [resp, dispatch])
-
   return (
     <BrowserRouter>
       <Route path="/profile" exact component={Profile} />
@@ -74,6 +58,7 @@ const App = () => {
       <Route path="/messenger" exact component={Messenger} />
       <Route path="/timeline_r" exact component={TimelineR} />
       <Route path="/search" exact component={SearchPage} />
+      <Route path="/appliedJobs" exact component={AppliedJobs} />
       <Route path="/" exact component={Login} />
     </BrowserRouter>
   );

@@ -30,7 +30,6 @@ const FormCard = (props) => {
         setCurrent(true);
       }
     }
-    console.log(propDetails);
   }, [propDetails]);
 
   const handleTextChange = (e) => {
@@ -44,16 +43,9 @@ const FormCard = (props) => {
   const handleSave = (e) => {
     e.preventDefault();
     setCurrent(false);
-    console.log(formState);
     let data = [];
     if (props.type === "experience") {
       if(canDetails.candidate.experience) data = canDetails.candidate.experience;
-      // if(!props.field){
-      //     data = data.filter((ele) => ele._id !== props.details._id)
-      //     data.push({...propDetails, ...formState})
-      // } else{
-      //     data.push(formState)
-      // }
     } else {
       if(canDetails.candidate.education )
       data = canDetails.candidate.education;
@@ -74,7 +66,6 @@ const FormCard = (props) => {
           if (res.code === 400) {
             console.log(res);
           } else {
-            console.log(res);
             props.type === "experience"
               ? dispatch2(
                   setCandidateDetailsToCart({

@@ -1,4 +1,4 @@
-import Navbar from "../Navbar/Navbar";
+import MyNavbar from "../Navbar/Navbar";
 import classes from "./Timeline.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartLine, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -13,6 +13,8 @@ import PostCard from "../../UI/PostCard/PostCard";
 import BlogsCard from "../../UI/BlogsCard/BlogsCard";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import { allJobPosts } from "../../apiCalls/Recruiter";
+import JobPostCard from "../../UI/JobPostCard/JobPostCard";
 
 const user = localStorage.getItem("rec");
 
@@ -28,6 +30,7 @@ const Timeline = (props) => {
   const [allPost, setAllPost] = useState([]);
   const [relevantPost, setRelevantPost] = useState([]);
   const [blogs, setBlogs] = useState([]);
+  const [jobs, setJobs] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -43,7 +46,6 @@ const Timeline = (props) => {
             Math.random() * (canDetails.candidate.skills.length - 0)
           );
           query = canDetails.candidate.skills[n];
-          console.log(query, n);
         }
       } else {
         setTimeout(function () {
@@ -53,7 +55,6 @@ const Timeline = (props) => {
       if (query !== "") {
         getBlogs(query)
           .then((res) => {
-            console.log(res.items);
             setBlogs(res.items);
           })
           .catch((e) => {
@@ -78,6 +79,27 @@ const Timeline = (props) => {
       })
       .catch((e) => console.log(e));
   }, [canDetails.posts]);
+
+  useEffect(() => {
+    allJobPosts()
+      .then((res) => {
+        res = res.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        let arr = [...res];
+        let arr2 = [];
+        let skills = [];
+        if (canDetails.candidate.skills) skills = canDetails.candidate.skills;
+        if (skills.length === 0) setJobs(arr);
+        else {
+          for (let i = 0; i < arr.length; i++) {
+            let ele = arr[i];
+            if (skills.some((skill) => ele.skillsRequired.includes(skill)))
+              arr2.push(ele);
+          }
+          setJobs(arr2);
+        }
+      })
+      .catch((e) => console.log(e));
+  }, [canDetails.candidate.skills]);
 
   useEffect(() => {
     let arr1 = [...allPost];
@@ -116,10 +138,7 @@ const Timeline = (props) => {
   const handlePost = (e) => {
     e.preventDefault();
     let posts = [];
-    console.log(canDetails.posts);
-
     if (canDetails.posts) posts = [...canDetails.posts];
-
     let data = {
       caption,
       technologies,
@@ -131,7 +150,6 @@ const Timeline = (props) => {
     CandidatePost.upload(data)
       .then((res) => {
         setModalShow(false);
-        console.log(res);
         if (res.status !== 400) {
           posts.push(res);
           dispatch(setCandidateDetailsToCart({ posts: posts }));
@@ -144,7 +162,7 @@ const Timeline = (props) => {
 
   return (
     <div style={{ backgroundColor: "#f3f3f3", minHeight: "100vh" }}>
-      <Navbar />
+      <MyNavbar />
       <div style={{ display: "flex", margin: "auto" }}>
         <div className={classes.PostsArea + " " + classes.Post}>
           <div className={classes.Post + " " + classes.AllPosts}>
@@ -154,8 +172,29 @@ const Timeline = (props) => {
                   className={classes.Post}
                   placeholder="Want to share something? "
                   onClick={(e) => setModalShow(true)}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", marginTop: "20px" }}
                 />
+                {blogs.length !== 0 && (
+                  <div
+                    className={
+                      "d-block d-sm-block d-md-none " +
+                      classes.BlogArea +
+                      " " +
+                      classes.Post
+                    }
+                  >
+                    <p style={{ fontSize: "1.2em", color: "#007bff" }}>
+                      <FontAwesomeIcon icon={faChartLine} /> Trending
+                    </p>
+                    {blogs.map((blog, index) => (
+                      <BlogsCard
+                        link={blog.link}
+                        title={blog.title}
+                        key={index}
+                      />
+                    ))}
+                  </div>
+                )}
                 {relevantPost.length > 0 ? (
                   <div>
                     {relevantPost
@@ -168,7 +207,15 @@ const Timeline = (props) => {
                   ""
                 )}
               </Tab>
-              <Tab ></Tab>
+              <Tab eventKey="jobs" title="Jobs">
+                <div style={{ marginTop: "20px" }}>
+                  {jobs.length > 0 &&
+                    jobs.map((job, index) => (
+                      <JobPostCard key={index} user="Candidate" post={job} />
+                    ))}
+                </div>
+              </Tab>
+              <Tab className="" ></Tab>
             </Tabs>
           </div>
           {blogs.length !== 0 && (

@@ -105,3 +105,15 @@ export const logoutRecruiter = () => {
   .then((res) => res)
   .catch((e) => console.log(e))
 }
+
+export const allJobPosts = () => {
+  return fetch(`${API}/allJobPosts`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+  })
+  .then((res) => res.json())
+  .catch((e) => console.log(e))
+}

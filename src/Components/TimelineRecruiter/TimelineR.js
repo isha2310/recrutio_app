@@ -1,4 +1,4 @@
-import Navbar from "../Navbar/Navbar";
+import MyNavbar from "../Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
@@ -56,8 +56,6 @@ const TimelineR = (props) => {
 
   useEffect(() => {
     if (recDetails.recruiter) {
-      console.log(recDetails.jobPosts);
-      console.log(recDetails.recruiter);
       let a = { ...arr };
       if (recDetails.recruiter.name && recDetails.recruiter.name !== "")
         a = { ...a, name: recDetails.recruiter.name };
@@ -99,7 +97,6 @@ const TimelineR = (props) => {
       if (details.company && details.company !== "") {
         str = str + " At " + details.company;
       }
-      console.log(str);
       setWorkDetails(str);
     }
   }, [details]);
@@ -122,7 +119,6 @@ const TimelineR = (props) => {
   const upload = () => {
     UploadService.upload(file)
       .then((res) => {
-        console.log(res);
         dispatch(setRecruiterDetailsToCart({ recruiter: { ...res } }));
       })
       .catch((e) => console.log(e));
@@ -157,10 +153,8 @@ const TimelineR = (props) => {
     console.log(arr2);
     jobPost(arr2)
       .then((res) => {
-        console.log(res)
         if (res.errors || res.status === 400) {
           if (res._message === "RecruiterPost validation failed" || res.status === 400) {
-            console.log(res);
             setModalShow3(true)
             setTimeout(() => {
               setModalShow3(false)
@@ -168,9 +162,7 @@ const TimelineR = (props) => {
           }
         } else {
           if (res.status !== 400) {
-            console.log(res);
             setModalShow2(false);
-            let posts = [];
             if (recDetails.jobPosts && recDetails.jobPosts.length > 0) {
               dispatch(
                 setRecruiterDetailsToCart({
@@ -192,7 +184,7 @@ const TimelineR = (props) => {
 
   return (
     <div style={{ backgroundColor: "#f3f3f3", minHeight: "100vh" }}>
-      <Navbar />
+      <MyNavbar />
       <div style={{ display: "flex", margin: "auto" }}>
         <div className={classes.PostsArea + " " + classes.Post}>
           <div className={classes.Post + " Profile"}>
@@ -514,15 +506,3 @@ const TimelineR = (props) => {
 };
 
 export default TimelineR;
-
-// { recDetails.jobPosts &&
-//   recDetails.jobPosts.length > 0 ?
-//   <div>
-//     {
-//       recDetails.jobPosts.map((index, post) => {
-//         return <JobPostCard key={index} post={post} />
-//       })
-//     }
-//   </div>
-//   : ""
-// }

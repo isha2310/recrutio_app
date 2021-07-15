@@ -27,7 +27,6 @@ const PostCard = (props) => {
     getCandidateById(props.info.candidateId)
     .then((res) => {
       if(!res.error){
-        console.log(res)
         history.push({
           pathname: '/viewProfile',
           state : { user: 'Candidate' , data: res.candidate, posts: res.posts }

@@ -12,7 +12,7 @@ import {
   setUser,
 } from "../../store/action/action";
 import { useHistory } from "react-router-dom";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import Alert from "react-bootstrap/Alert";
 
 const Login = (props) => {
@@ -38,7 +38,6 @@ const Login = (props) => {
           if (res.error) {
             console.log(res.error);
           } else {
-            console.log(res)
             dispatch(setRecruiterDetailsToCart(res))
           }
         })
@@ -73,7 +72,6 @@ const Login = (props) => {
     if (user === "Candidate") {
       LoginCandidate({ email, password })
         .then((res) => {
-          console.log(res);
           if (res.error) {
             setShow(true);
             setMsg(res.error);
@@ -92,7 +90,6 @@ const Login = (props) => {
               if (res.error) {
                 console.log(res.error);
               } else {
-                console.log(res);
                 props.dispatch(setCandidateDetailsToCart(res));
               }
             })
@@ -102,7 +99,6 @@ const Login = (props) => {
     } else {
       LoginRecruiter({ email, password })
         .then((res) => {
-          console.log(res);
           if (res.error) {
             setShow(true);
             setMsg(res.error);
@@ -125,7 +121,6 @@ const Login = (props) => {
     if (user === "Candidate") {
       SignupCandidate({ email, password, name: username })
         .then((res) => {
-          console.log(res);
           if (res.error) {
             setShow(true);
             setMsg(res.error);
@@ -146,7 +141,6 @@ const Login = (props) => {
     } else {
       SignupRecruiter({ email, password, name: username })
         .then((res) => {
-          console.log(res);
           if (res.error) {
             setShow(true);
             setMsg(res.error);

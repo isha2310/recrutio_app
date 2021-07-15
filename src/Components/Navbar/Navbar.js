@@ -2,43 +2,56 @@ import { useHistory } from "react-router-dom";
 import classes from "./Navbar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faCog, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { NavLink } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import { getAllCandidate, logoutCandidate } from "../../apiCalls/Candidate";
 import { useDispatch } from "react-redux";
-import { resetCandidateDetailsToCart, resetRecruiterDetailsToCart } from "../../store/action/action";
-import { useState } from "react";
+import {
+  resetCandidateDetailsToCart,
+  resetRecruiterDetailsToCart,
+} from "../../store/action/action";
 import { logoutRecruiter } from "../../apiCalls/Recruiter";
 
-const Navbar = () => {
+const MyNavbar = () => {
   let history = useHistory();
   const dispatch = useDispatch();
   let user = localStorage.getItem("rec");
 
   const searchResult = (e) => {
     if (e.keyCode === 13) {
-     let query = e.target.value
+      let query = e.target.value;
       getAllCandidate()
         .then((res) => {
-          let arr2 = []
-          let arr = res.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-          for(let i=0; i<arr.length; i++){
-            let candidate = arr[i]
-            if(candidate.skills.length > 0 ){
-              let check = candidate.skills.filter((skill) => skill.toLowerCase().replace(/ /g, "").includes(query.toLowerCase()) )
-              if(check.length > 0) arr2.push(candidate)
+          let arr2 = [];
+          let arr = res.sort(
+            (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+          );
+          for (let i = 0; i < arr.length; i++) {
+            let candidate = arr[i];
+            if (candidate.skills.length > 0) {
+              let check = candidate.skills.filter((skill) =>
+                skill
+                  .toLowerCase()
+                  .replace(/ /g, "")
+                  .includes(query.toLowerCase())
+              );
+              if (check.length > 0) arr2.push(candidate);
             }
-            if(candidate.bio && candidate.bio !== ''){
-              if(candidate.bio.toLowerCase().replace(/ /g, "").includes(query.toLowerCase())){
-                arr2.push(candidate)
+            if (candidate.bio && candidate.bio !== "") {
+              if (
+                candidate.bio
+                  .toLowerCase()
+                  .replace(/ /g, "")
+                  .includes(query.toLowerCase())
+              ) {
+                arr2.push(candidate);
               }
             }
           }
-          console.log(arr2)
+          console.log(arr2);
           history.push({
-            pathname: '/search',
-            state : { candidates: arr2, query: query }
-          })
+            pathname: "/search",
+            state: { candidates: arr2, query: query },
+          });
         })
         .catch((e) => console.log(e));
     }
@@ -47,32 +60,32 @@ const Navbar = () => {
   const handleNav = (num) => {
     if (num === 1) {
       history.push("/profile");
-    } else if(num===2){
-      history.push("/search")
+    } else if (num === 2) {
+      history.push("/search");
     } else if (num === 3) {
-      if(localStorage.getItem('rec') === 'Candidate'){
+      if (localStorage.getItem("rec") === "Candidate") {
         logoutCandidate()
-        .then((res) => {
-          if (res.status === 200) {
-            localStorage.clear();
-            history.push("/");
-            dispatch(resetCandidateDetailsToCart());
-          }
-          console.log(res);
-        })
-        .catch((e) => console.log(e));
-      }
-      else{
+          .then((res) => {
+            if (res.status === 200) {
+              localStorage.clear();
+              history.push("/");
+              dispatch(resetCandidateDetailsToCart());
+            }
+          })
+          .catch((e) => console.log(e));
+      } else {
         logoutRecruiter()
-        .then((res) => {
-          if (res.status === 200) {
-            localStorage.clear();
-            history.push("/");
-            dispatch(resetRecruiterDetailsToCart())
-          }
-        })
-        .catch((e) => console.log(e) )
+          .then((res) => {
+            if (res.status === 200) {
+              localStorage.clear();
+              history.push("/");
+              dispatch(resetRecruiterDetailsToCart());
+            }
+          })
+          .catch((e) => console.log(e));
       }
+    } else if (num === 4) {
+      history.push("/appliedJobs");
     }
   };
 
@@ -140,7 +153,8 @@ const Navbar = () => {
               Your Profile
             </Dropdown.Item>
           )}
-          <Dropdown.Item className="d-none d-sm-block d-md-none"
+          <Dropdown.Item
+            className="d-block d-sm-block d-md-none"
             onClick={(e) => {
               e.preventDefault();
               handleNav(2);
@@ -148,6 +162,16 @@ const Navbar = () => {
           >
             Search
           </Dropdown.Item>
+          {localStorage.getItem("rec") === "Candidate" && (
+            <Dropdown.Item
+              onClick={(e) => {
+                e.preventDefault();
+                handleNav(4);
+              }}
+            >
+              Applied Jobs
+            </Dropdown.Item>
+          )}
           <Dropdown.Item
             onClick={(e) => {
               e.preventDefault();
@@ -162,4 +186,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default MyNavbar;

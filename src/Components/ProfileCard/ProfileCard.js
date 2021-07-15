@@ -37,21 +37,18 @@ const ProfileCard = (props) => {
 
   useEffect(() => {
     if(localStorage.getItem('rec') === 'Candidate' ){
-      console.log(canDetails)
       if( canDetails.candidate ){
         setCandidate(canDetails.candidate)
         setUser('Candidate')
       } 
     }
     if( props.details ) {
-      console.log(props.details)
       setCandidate(props.details)
       setUser(props.user)
     }
   }, [canDetails, props.details, props.user]);
 
   useEffect(() =>{
-    console.log(candidate)
     setName(candidate.name );
     if (candidate.bio) setBio(candidate.bio);
     if (candidate.phnNumber)
@@ -73,7 +70,6 @@ const ProfileCard = (props) => {
   },[user, candidate])
 
   useEffect(() => {
-    console.log(candidate)
     if (candidate.snap) {
       let im = `data:${candidate.snap};base64,${Buffer.from(
         candidate.snap
@@ -120,7 +116,6 @@ const ProfileCard = (props) => {
   const upload = () => {
     UploadService.upload(file)
       .then((res) => {
-        console.log(res);
         dispatch(setCandidateDetailsToCart({ candidate: { snap: res.snap } }));
       })
       .catch((e) => console.log(e));

@@ -1,10 +1,9 @@
 import { useHistory, useLocation } from "react-router-dom";
-import Navbar from "../Navbar/Navbar";
+import MyNavbar from "../Navbar/Navbar";
 import "./messenger.css";
 import Conversation from "../../Components/Conversations/Conversation";
 import Message from "../../Components/Message/Message";
-// import ChatOnline from "../../components/chatOnline/ChatOnline";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 import { API } from "../../apiCalls/api";
@@ -12,6 +11,8 @@ import { useSelector } from "react-redux";
 import Pic from "../Assets/profile.png";
 import { getCandidateById } from "../../apiCalls/Candidate";
 import { getRecruiterById } from "../../apiCalls/Recruiter";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 export default function Messenger(props) {
   const [conversations, setConversations] = useState([]);
@@ -21,11 +22,15 @@ export default function Messenger(props) {
   const [frndDp, setFrndDp] = useState(Pic);
   const [frndName, setFrndName] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const [update, setUpdate] = useState(true)
+  const [update, setUpdate] = useState(true);
+  const [details, setDetails] = useState({});
+  const [show, setShow] = useState(false);
+  const [opacity, setOpacity] = useState(1);
   const socket = useRef();
   const scrollRef = useRef();
   const location = useLocation();
   const canDetails = useSelector((state) => state.candidate.candidate);
+  const recDetails = useSelector((state) => state.recruiter.recruiter);
 
   let history = useHistory();
 
@@ -44,20 +49,18 @@ export default function Messenger(props) {
   }, []);
 
   useEffect(() => {
+    if (localStorage.getItem("rec") === "Candidate") {
+      setDetails(canDetails);
+    } else {
+      setDetails(recDetails);
+    }
+  }, [canDetails, recDetails]);
+
+  useEffect(() => {
     arrivalMessage &&
       currentChat?.members.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
-
-  // useEffect(() => {
-  //     socket.current.emit("addUser", firstUserId);
-  //     socket.current.on("getUsers", (users) => {
-  //         console.log(users)
-  //         setOnlineUsers(
-  //             user.followings.filter((f) => users.some((u) => u.firstUserId === f))
-  //         );
-  //     });
-  // }, [user]);
 
   useEffect(() => {
     console.log(currentChat);
@@ -81,7 +84,7 @@ export default function Messenger(props) {
   }, [currentChat]);
 
   useEffect(() => {
-    if(update === true){
+    if (update === true) {
       const getConversations = async () => {
         try {
           if (secondUserId !== null) {
@@ -91,26 +94,26 @@ export default function Messenger(props) {
             if (res1.data == null) {
               const body = { senderId: firstUserId, receiverId: secondUserId };
               const res = await axios.post(`${API}/conversation/`, body);
-              setCurrentChat(res.data)
+              setCurrentChat(res.data);
               // setConversations(res.data);
             }
-            console.log(res1)
-            setCurrentChat(res1.data)
+            setCurrentChat(res1.data);
           }
-          if(firstUserId){
+          if (firstUserId) {
             const res = await axios.get(`${API}/conversation/` + firstUserId);
             socket.current.emit("addUser", firstUserId);
             socket.current.on("getUsers", (users) => {
               console.log(users);
             });
-            let convo = res.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-            console.log('......',convo)
+            let convo = res.data.sort(
+              (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+            );
             setConversations(convo);
-            setCurrentChat(convo[0])
+            setCurrentChat(convo[0]);
           }
-            // setOnlineUsers(
-            //     user.followings.filter((f) => users.some((u) => u.firstUserId === f))
-            // );
+          // setOnlineUsers(
+          //     user.followings.filter((f) => users.some((u) => u.firstUserId === f))
+          // );
         } catch (err) {
           console.log(err);
         }
@@ -119,13 +122,15 @@ export default function Messenger(props) {
     }
   }, [firstUserId, update]);
 
-  useEffect(() =>{
-    if(update === true){
-      let convo = conversations.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-      setConversations(convo)
-      setUpdate(false)
+  useEffect(() => {
+    if (update === true) {
+      let convo = conversations.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
+      setConversations(convo);
+      setUpdate(false);
     }
-  }, [update])
+  }, [update]);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -158,8 +163,10 @@ export default function Messenger(props) {
 
     try {
       const res = await axios.post(`${API}/message`, message);
-      const res1 = await axios.patch(`${API}/conversationUpdate/${message.conversationId}`)
-      setUpdate(true)
+      const res1 = await axios.patch(
+        `${API}/conversationUpdate/${message.conversationId}`
+      );
+      setUpdate(true);
       setMessages([...messages, res.data]);
       setNewMessage("");
     } catch (err) {
@@ -201,20 +208,50 @@ export default function Messenger(props) {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    if (show) setOpacity(0.5);
+    else setOpacity(1);
+  }, [show]);
+
   return (
     <>
-      <Navbar />
-      <div className="messenger">
+      <MyNavbar />
+      <div
+        className="messenger"
+        onClick={(e) => {
+          if (show) setShow(false);
+        }}
+        style={{ opacity: opacity }}
+      >
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-            <input placeholder="Search for friends" className="chatMenuInput" />
-            {conversations !== null &&
-              conversations
-              .map((c, index) => (
-                <div key={index} onClick={() => setCurrentChat(c)}>
-                  <Conversation conversation={c} currentUser={canDetails} />
-                </div>
-              ))}
+            {conversations !== null && (
+              <div
+                className="d-none d-md-block d-lg-block "
+                style={{ borderRight: "1px solid gray", minHeight: "88vh" }}
+              >
+                <h4 style={{ textAlign: "center" }}>Chats</h4>
+                {conversations.map((c, index) => (
+                  <div key={index} onClick={() => setCurrentChat(c)}>
+                    <Conversation conversation={c} currentUser={details} />
+                  </div>
+                ))}
+              </div>
+            )}
+            {conversations !== null && (
+              <button
+                className="d-block d-sm-block d-md-none"
+                style={{
+                  backgroundColor: "white",
+                  color: "gray",
+                  outline: "none",
+                  border: "none",
+                }}
+                onClick={(e) => setShow(!show)}
+              >
+                <FontAwesomeIcon icon={faBars} />
+              </button>
+            )}
           </div>
         </div>
         <div className="chatBox">
@@ -257,6 +294,36 @@ export default function Messenger(props) {
           </div>
         </div>
       </div>
+      {show && (
+        <div
+          style={{
+            position: "absolute",
+            zIndex: "10",
+            backgroundColor: "#bebebe",
+            width: "70vw",
+            minHeight: "83vh",
+            padding: "20px",
+            transition: "width 2s",
+            left: "0",
+            marginTop: "10px",
+            opacity: "1",
+            top: "99px",
+          }}
+        >
+          <h4 style={{ textAlign: "center" }}>Chats</h4>
+          {conversations.map((c, index) => (
+            <div
+              key={index}
+              onClick={() => {
+                setShow(!show);
+                setCurrentChat(c);
+              }}
+            >
+              <Conversation conversation={c} currentUser={details} />
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }

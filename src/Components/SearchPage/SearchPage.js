@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ProfileIcon from "../../UI/ProfileIcon/ProfileIcon";
-import Navbar from "../Navbar/Navbar";
+import MyNavbar from "../Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faCog, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { getAllCandidate } from "../../apiCalls/Candidate";
 
 const SearchPage = (props) => {
@@ -49,7 +49,6 @@ const SearchPage = (props) => {
               }
             }
           }
-          console.log(arr2);
           setCandidates(arr2);
           setKeyword(query);
         })
@@ -59,31 +58,31 @@ const SearchPage = (props) => {
 
   return (
     <div style={{ backgroundColor: "#f3f3f3", minHeight: "100vh" }}>
-      <Navbar />
+      <MyNavbar />
       <div
         style={{
           margin: "auto",
-          width: "80vw",
+          width: "82vw",
           backgroundColor: "white",
           marginTop: "20px",
           padding: "20px 10px",
           border: "1px solid #bebebe",
           borderRadius: "10px",
-          minHeight: '50vh'
+          minHeight: "50vh",
         }}
       >
-        <div style={{marginBottom: "30px" }}>
+        <div style={{ marginBottom: "30px" }}>
           <div
             style={{
               width: "70%",
-              margin: 'auto',
+              margin: "auto",
               backgroundColor: "white",
               padding: "1px 5px",
               border: "1px solid #bebebe",
               borderRadius: "15px",
               display: "flex",
               alignItems: "center",
-              marginBottom: "5px"
+              marginBottom: "5px",
             }}
           >
             <FontAwesomeIcon
@@ -108,18 +107,41 @@ const SearchPage = (props) => {
             />
           </div>
           {location.state && location.state.query && (
-            <p>Search Results for <b>{location.state.query}</b></p>
+            <p style={{ textAlign: "center" }}>
+              Search Results for <b>{keyword}</b>
+            </p>
           )}
         </div>
-        {candidates.length > 0 ?
-          candidates.map((candidate, index) => (
-            <ProfileIcon info={candidate} key={index} />
-          )): (!location.state ? (
-            <h3 style={{color: '#bebebe',margin : 'auto', textAlign: 'center', marginTop: '100px'}} >Search using skills or tools and technologies </h3>)
-            : (!location.state.query && <h3 style={{color: '#bebebe',margin : 'auto', textAlign: 'center', marginTop: '100px'}} >No result found</h3> )
-          )
-            
-        }
+        {candidates.length > 0
+          ? candidates.map((candidate, index) => (
+              <ProfileIcon info={candidate} key={index} />
+            ))
+          : candidates.length === 0
+          && (!location.state && keyword === "" && (
+              <h3
+                style={{
+                  color: "#bebebe",
+                  margin: "auto",
+                  textAlign: "center",
+                  marginTop: "100px",
+                }}
+              >
+                Search using skills or tools and technologies{" "}
+              </h3>
+            ))}
+            {candidates.length === 0
+          && (keyword !== "" && (
+              <h3
+                style={{
+                  color: "#bebebe",
+                  margin: "auto",
+                  textAlign: "center",
+                  marginTop: "100px",
+                }}
+              >
+                No result found
+              </h3>
+            ))}
       </div>
     </div>
   );

@@ -13,8 +13,10 @@ import { useHistory } from "react-router-dom";
 const JobPostCard = (props) => {
   let tech = props.post.skillsRequired.join(", ");
   let dispatch = useDispatch();
-  let history = useHistory()
+  let history = useHistory();
   const [status, setStatus] = useState("Apply");
+  const [hover, setHover] = useState(false);
+  const [appliedStyle, setAppliedStyle] = useState({});
 
   useEffect(() => {
     if (props.user === "Candidate") {
@@ -25,11 +27,22 @@ const JobPostCard = (props) => {
       }
     }
   }, [props.user, props.post.candidateIds]);
+  
+  useEffect(() => {
+    if (hover) {
+      setAppliedStyle({ textDecoration: "underline", cursor: "pointer" });
+    } else {
+      setAppliedStyle({ textDecoration: "none" });
+    }
+  }, [hover]);
+
+  const toggleHover = () => {
+    setHover(!hover);
+  };
 
   const jobApply = () => {
     if (status === "Apply") {
       applyForJob(props.post._id).then((res) => {
-        console.log(res)
         if (res.status !== 400 || res.status !== 404) {
           dispatch(setCandidateDetailsToCart({ candidate: { ...res } }));
         }
@@ -41,7 +54,6 @@ const JobPostCard = (props) => {
     let id = props.post._id;
     deleteJobPost(id)
       .then((res) => {
-        console.log(res);
         if (res.status !== 400) {
           dispatch(
             setRecruiterDetailsToCart({ jobPosts: { ...res.jobPosts } })
@@ -57,34 +69,36 @@ const JobPostCard = (props) => {
         if (res.error) {
           console.log(res.error);
         } else {
-            console.log(res)
-            history.push({
-              pathname: '/viewProfile',
-              state : { user: 'Recruiter' , data: res.recruiter, posts: res.jobPosts }
-            })
+          history.push({
+            pathname: "/viewProfile",
+            state: {
+              user: "Recruiter",
+              data: res.recruiter,
+              posts: res.jobPosts,
+            },
+          });
         }
       })
       .catch((e) => console.log(e));
   };
 
   const handleCandidates = () => {
-
     getAllCandidate()
-    .then((res) => {
-      let arr1 = props.post.candidateIds
-      let arr2 = []
-      let arr = res
-      for(let i =0; i<arr.length; i++){
-        let result = arr1.filter((a) => a === arr[i]._id )
-        if(result.length > 0) arr2.push(result)
-      }
-      history.push({
-        pathname: '/search',
-        state : { candidates: arr2 }
+      .then((res) => {
+        let arr1 = props.post.candidateIds;
+        let arr2 = [];
+        let arr = res;
+        for (let i = 0; i < arr.length; i++) {
+          let result = arr1.filter((a) => a === arr[i]._id);
+          if (result.length > 0) arr2.push(result);
+        }
+        history.push({
+          pathname: "/search",
+          state: { candidates: arr2 },
+        });
       })
-    })
-    .catch((e) => console.log(e))
-  }
+      .catch((e) => console.log(e));
+  };
 
   return (
     <div
@@ -95,7 +109,14 @@ const JobPostCard = (props) => {
         borderRadius: "10px",
       }}
     >
-      <h5 onClick={openProfile}>{props.post.recruiterName}</h5>
+      <h5
+        style={appliedStyle}
+        onMouseEnter={toggleHover}
+        onMouseLeave={toggleHover}
+        onClick={openProfile}
+      >
+        {props.post.recruiterName}
+      </h5>
       <p>
         <b>Company: </b>
         {props.post.company}
@@ -116,10 +137,23 @@ const JobPostCard = (props) => {
         <b>Salary: </b>
         {props.post.salary}
       </p>
-      {localStorage.getItem('rec-id') === props.post.recruiterId &&
-        <button style={{outline: 'none', border: 'none', backgroundColor: 'white', fontWeight: 'bold', padding: '0', color: '#212529'}} onClick={handleCandidates} >View candidates who applied</button>
-      }
-      {props.user === "Recruiter" || (localStorage.getItem('rec-id') === props.post.recruiterId ) ? (
+      {localStorage.getItem("rec-id") === props.post.recruiterId && (
+        <button
+          style={{
+            outline: "none",
+            border: "none",
+            backgroundColor: "white",
+            fontWeight: "bold",
+            padding: "0",
+            color: "#212529",
+          }}
+          onClick={handleCandidates}
+        >
+          View candidates who applied
+        </button>
+      )}
+      {props.user === "Recruiter" ||
+      localStorage.getItem("rec-id") === props.post.recruiterId ? (
         <button
           type="button"
           style={{
@@ -134,13 +168,20 @@ const JobPostCard = (props) => {
             onClick={deletePost}
           />{" "}
         </button>
-      ) : ( props.user !== "Recruiter" ?
-        <button type="button"
-        style={{
-          border: '1px solid blue',
-          backgroundColor: "white",
-          float: "right",
-        }} onClick={jobApply} >{status}</button> : ""
+      ) : props.user !== "Recruiter" ? (
+        <button
+          type="button"
+          style={{
+            border: "1px solid blue",
+            backgroundColor: "white",
+            float: "right",
+          }}
+          onClick={jobApply}
+        >
+          {status}
+        </button>
+      ) : (
+        ""
       )}
     </div>
   );

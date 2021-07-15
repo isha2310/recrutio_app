@@ -2658,6 +2658,11 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
+animated-burger-menu@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/animated-burger-menu/-/animated-burger-menu-1.0.1.tgz#60b99b5b1da90aa2732f04b4dce3c9ec092a5eb8"
+  integrity sha512-r03GxcmEQqPNOjFTvBVDxGBTlPgnkTj8s6Wpa0iTPHPIRq6zy5b9U0uWEz6bhJft+ULhebK8TOrlLj5IIrvxhg==
+
 ansi-colors@^3.0.0:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/ansi-colors/-/ansi-colors-3.2.4.tgz#e3a3da4bfbae6c86a9c285625de124a234026fbf"

@@ -18,6 +18,7 @@
   width: 75%;
 }
 .BlogArea{
+  margin-left: 1.7em;
   position: sticky;
   top: 1em;
 }
@@ -83,5 +84,9 @@
   .PostsArea{
     display: block;
     width: 92vw ;
+  }
+  .BlogArea{
+    margin-left: 0;
+    position: relative;
   }
 }
