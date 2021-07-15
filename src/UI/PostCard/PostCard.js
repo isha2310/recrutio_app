@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import classes from "./PostCard.module.css";
-import { Image, Transformation } from 'cloudinary-react';
 import Carousel from "react-bootstrap/Carousel";
 import { deleteCanPost, getCandidateById } from "../../apiCalls/Candidate";
 import { useHistory } from "react-router-dom";

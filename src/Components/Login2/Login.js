@@ -119,21 +119,23 @@ const Login = (props) => {
 
   const handleSignupClick = () => {
     if (user === "Candidate") {
+      console.log(JSON.stringify({ email, password, name: username }))
       SignupCandidate({ email, password, name: username })
         .then((res) => {
-          if (res.error) {
+          console.log(res)
+          if (res.errors) {
             setShow(true);
-            setMsg(res.error);
+            setMsg(res.errors);
             setTimeout(() => {
               setShow(false)
             }, 5000);
-            return res;
-          }
+          } else {
           props.dispatch(setCandidateDetailsToCart(res));
           localStorage.setItem("rec-user", username);
           localStorage.setItem("rec-id", res.candidate._id);
           localStorage.setItem("rec-token", res.token);
           history.push("/profile");
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -141,9 +143,9 @@ const Login = (props) => {
     } else {
       SignupRecruiter({ email, password, name: username })
         .then((res) => {
-          if (res.error) {
+          if (res.errors) {
             setShow(true);
-            setMsg(res.error);
+            setMsg(res.errors);
             setTimeout(() => {
               setShow(false)
             }, 5000);

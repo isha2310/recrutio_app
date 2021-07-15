@@ -4,8 +4,7 @@ import Button from "react-bootstrap/Button";
 import classes from "./FormCard.Module.css";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  setCandidateDetailsToCart,
-  setRecruiterDetailsToCart,
+  setCandidateDetailsToCart
 } from "../../store/action/action";
 import { updateCandidateDetails } from "../../apiCalls/Candidate";
 
