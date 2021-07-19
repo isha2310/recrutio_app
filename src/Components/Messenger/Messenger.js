@@ -26,6 +26,7 @@ export default function Messenger(props) {
   const [details, setDetails] = useState({});
   const [show, setShow] = useState(false);
   const [opacity, setOpacity] = useState(1);
+  const [firstUserId, setfirstUserId] = useState('')
   const socket = useRef();
   const scrollRef = useRef();
   const location = useLocation();
@@ -34,8 +35,12 @@ export default function Messenger(props) {
 
   let history = useHistory();
 
-  const firstUserId = canDetails._id;
   const secondUserId = location?.state?.receiverId || null;
+
+  useEffect(() => {
+    console.log(canDetails._id)
+    setfirstUserId(canDetails._id)
+  }, [canDetails] )
 
   useEffect(() => {
     socket.current = io("https://recrutio.herokuapp.com");
@@ -100,6 +105,7 @@ export default function Messenger(props) {
             setCurrentChat(res1.data);
           }
           if (firstUserId) {
+            console.log(firstUserId)
             const res = await axios.get(`${API}/conversation/` + firstUserId);
             socket.current.emit("addUser", firstUserId);
             socket.current.on("getUsers", (users) => {
@@ -124,11 +130,13 @@ export default function Messenger(props) {
 
   useEffect(() => {
     if (update === true) {
-      let convo = conversations.sort(
-        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
-      );
-      setConversations(convo);
-      setUpdate(false);
+      if(conversations.length > 0){
+        let convo = conversations.sort(
+          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+        );
+        setConversations(convo);
+        setUpdate(false);
+      }
     }
   }, [update]);
 

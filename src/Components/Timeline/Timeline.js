@@ -15,6 +15,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { allJobPosts } from "../../apiCalls/Recruiter";
 import JobPostCard from "../../UI/JobPostCard/JobPostCard";
+import { useHistory } from "react-router-dom";
 
 const user = localStorage.getItem("rec");
 
@@ -33,11 +34,10 @@ const Timeline = (props) => {
   const [jobs, setJobs] = useState([]);
 
   const dispatch = useDispatch();
-
+  let history = useHistory()
   const canDetails = useSelector((state) => state.candidate);
 
   useEffect(() => {
-    console.log("hey", user);
     let query = "trending";
     if (user === "Candidate") {
       if (canDetails.candidate.skills) {
@@ -61,8 +61,10 @@ const Timeline = (props) => {
             setBlogs([]);
           });
       }
+    } else {
+      history.push('/timeline_r')
     }
-  }, [canDetails.candidate.skills]);
+  }, [canDetails.candidate.skills, history]);
 
   useEffect(() => {
     setTechnologies([]);

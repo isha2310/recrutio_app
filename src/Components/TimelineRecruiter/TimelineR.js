@@ -22,10 +22,12 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Alert from 'react-bootstrap/Alert'
 import JobPostCard from "../../UI/JobPostCard/JobPostCard";
+import { useHistory } from "react-router-dom";
 
 const TimelineR = (props) => {
   let recDetails = useSelector((state) => state.recruiter);
   const dispatch = useDispatch();
+  let history = useHistory()
 
   const [file, setFile] = useState(undefined);
   const [modalShow, setModalShow] = useState(false);
@@ -47,6 +49,12 @@ const TimelineR = (props) => {
     company: "",
     email: "",
   });
+
+  useEffect(() => {
+    if (localStorage.getItem("rec") !== "Recruiter"){
+      history.push('/timeline')
+    }
+  })
 
   useEffect(() => {
     if (recDetails.recruiter) {

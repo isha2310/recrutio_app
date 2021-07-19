@@ -14,6 +14,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import PostCard from "../../UI/PostCard/PostCard";
 import MyNavbar from "../Navbar/Navbar";
+import { useHistory } from "react-router-dom";
 
 const Profile = (props) => {
   const [field, setField] = useState(0);
@@ -21,6 +22,7 @@ const Profile = (props) => {
   const [view, setView] = useState("Profile");
   const [posts, setPosts] = useState([]);
   let user = localStorage.getItem("rec");
+  let history = useHistory()
 
   useEffect(() => {
     let user = localStorage.getItem("rec");
@@ -37,8 +39,10 @@ const Profile = (props) => {
       if (props.candidate.posts && props.candidate.posts.length !== 0) {
         setPosts([...props.candidate.posts]);
       }
+    } else {
+      history.push('/timeline_r')
     }
-  }, [props.candidate.posts, props.candidate.candidate.snap]);
+  }, [props.candidate.posts, props.candidate.candidate.snap, history]);
 
   const handleSkill = (e) => {
     e.preventDefault();
