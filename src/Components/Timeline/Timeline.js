@@ -116,6 +116,9 @@ const Timeline = (props) => {
           }
           setRelevantPost(arr3);
         }
+        if(arr3.length === 0){
+          setRelevantPost(arr1)
+        }
       }
     } else {
       setRelevantPost(arr1);

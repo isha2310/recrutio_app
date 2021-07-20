@@ -132,6 +132,7 @@ const MyNavbar = () => {
       />
       <Dropdown className={classes.Dropdown1}>
         <Dropdown.Toggle
+          variant="dark"
           style={{ backgroundColor: "transparent", border: "none" }}
           id="dropdown-basic"
         >

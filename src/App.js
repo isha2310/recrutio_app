@@ -4,7 +4,7 @@ import Profile from './Components/Profile/Profile';
 import Timeline from './Components/Timeline/Timeline';
 import ViewProfile from './UI/ViewProfile/ViewProfile';
 import Messenger from './Components/Messenger/Messenger';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getCandidateById } from './apiCalls/Candidate';
 import { connect, useDispatch } from 'react-redux';
 import { setCandidateDetailsToCart, setRecruiterDetailsToCart } from './store/action/action';
@@ -18,8 +18,6 @@ const App = () => {
 
   const dispatch = useDispatch()
 
-  const [resp, setResp] = useState({})
-
   useEffect(() => {
     let user = localStorage.getItem('rec')
     let id = localStorage.getItem('rec-id')
@@ -30,7 +28,6 @@ const App = () => {
           console.log(res.error);
         } else {
           dispatch(setCandidateDetailsToCart(res));
-          setResp(res);
         }
       })
       .catch((e) => console.log(e))
@@ -41,7 +38,6 @@ const App = () => {
           if (res.error) {
             console.log(res.error);
           } else {
-            setResp(res);
             dispatch(setRecruiterDetailsToCart(res))
           }
         })

@@ -3,9 +3,13 @@ import "./Login.css";
 import {
   getCandidateById,
   LoginCandidate,
-  SignupCandidate
+  SignupCandidate,
 } from "../../apiCalls/Candidate";
-import { LoginRecruiter, SignupRecruiter,getRecruiterById } from "../../apiCalls/Recruiter";
+import {
+  LoginRecruiter,
+  SignupRecruiter,
+  getRecruiterById,
+} from "../../apiCalls/Recruiter";
 import {
   setCandidateDetailsToCart,
   setRecruiterDetailsToCart,
@@ -14,69 +18,73 @@ import {
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import Alert from "react-bootstrap/Alert";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const Login = (props) => {
   let history = useHistory();
-  let dispatch = props.dispatch
+  let dispatch = props.dispatch;
 
   if (localStorage.getItem("rec-token")) {
-    if(localStorage.getItem("rec") === 'Candidate'){
+    if (localStorage.getItem("rec") === "Candidate") {
       history.push("/profile");
       getCandidateById(localStorage.getItem("rec-id"))
-      .then((res) => {
-        if (res.error) {
-          console.log(res.error);
-        } else {
-          dispatch(setCandidateDetailsToCart(res));
-        }
-      })
-      .catch((e) => console.log(e))
+        .then((res) => {
+          if (res.error) {
+            console.log(res.error);
+          } else {
+            dispatch(setCandidateDetailsToCart(res));
+          }
+        })
+        .catch((e) => console.log(e));
     } else {
-      history.push('/timeline_r')
+      history.push("/timeline_r");
       getRecruiterById(localStorage.getItem("rec-id"))
         .then((res) => {
           if (res.error) {
             console.log(res.error);
           } else {
-            dispatch(setRecruiterDetailsToCart(res))
+            dispatch(setRecruiterDetailsToCart(res));
           }
         })
-        .catch((e) => console.log(e))
+        .catch((e) => console.log(e));
     }
   }
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [signup, SetSignup] = useState(false);
-  const [user, setUserN] = useState('');
+  const [user, setUserN] = useState("");
   const [show, setShow] = useState(false);
   const [msg, setMsg] = useState("");
+  const [status, setStatus] = useState("Login");
+  const [section, setSection] = useState("Home");
 
   useEffect(() => {
-    if(!localStorage.getItem('rec')){
-      localStorage.setItem("rec", "Candidate")
-      setUserN('Candidate')
+    if (!localStorage.getItem("rec")) {
+      localStorage.setItem("rec", "Candidate");
+      setUserN("Candidate");
     } else {
-      setUserN(localStorage.getItem('rec'))
+      setUserN(localStorage.getItem("rec"));
     }
   }, []);
 
   useEffect(() => {
-    if(user !== ''){
-      dispatch(setUser(user))
+    if (user !== "") {
+      dispatch(setUser(user));
     }
-  },[user, dispatch])
+  }, [user, dispatch]);
 
   const handleLoginClick = () => {
+    setStatus('Logging In ...')
     if (user === "Candidate") {
       LoginCandidate({ email, password })
         .then((res) => {
           if (res.error) {
+            setStatus('Login')
             setShow(true);
             setMsg(res.error);
             setTimeout(() => {
-              setShow(false)
+              setShow(false);
             }, 5000);
             return res;
           }
@@ -100,10 +108,11 @@ const Login = (props) => {
       LoginRecruiter({ email, password })
         .then((res) => {
           if (res.error) {
+            setStatus('Login')
             setShow(true);
             setMsg(res.error);
             setTimeout(() => {
-              setShow(false)
+              setShow(false);
             }, 5000);
             return res;
           }
@@ -118,23 +127,25 @@ const Login = (props) => {
   };
 
   const handleSignupClick = () => {
+    setStatus('Signing Up...')
     if (user === "Candidate") {
-      console.log(JSON.stringify({ email, password, name: username }))
+      console.log(JSON.stringify({ email, password, name: username }));
       SignupCandidate({ email, password, name: username })
         .then((res) => {
-          console.log(res)
+          console.log(res);
           if (res.errors) {
+            setStatus('Sign Up')
             setShow(true);
             setMsg(res.errors);
             setTimeout(() => {
-              setShow(false)
+              setShow(false);
             }, 5000);
           } else {
-          props.dispatch(setCandidateDetailsToCart(res));
-          localStorage.setItem("rec-user", username);
-          localStorage.setItem("rec-id", res.candidate._id);
-          localStorage.setItem("rec-token", res.token);
-          history.push("/profile");
+            props.dispatch(setCandidateDetailsToCart(res));
+            localStorage.setItem("rec-user", username);
+            localStorage.setItem("rec-id", res.candidate._id);
+            localStorage.setItem("rec-token", res.token);
+            history.push("/profile");
           }
         })
         .catch((err) => {
@@ -144,10 +155,11 @@ const Login = (props) => {
       SignupRecruiter({ email, password, name: username })
         .then((res) => {
           if (res.errors) {
+            setStatus('Sign Up')
             setShow(true);
             setMsg(res.errors);
             setTimeout(() => {
-              setShow(false)
+              setShow(false);
             }, 5000);
             return res;
           }
@@ -163,112 +175,168 @@ const Login = (props) => {
     }
   };
 
-  const handleMethod = (e) => {
-    e.preventDefault();
-    SetSignup(!signup);
-  };
-
   return (
     <div className="LoginPage">
-      <div className={"Div2"}>
-        {user === "Candidate" ? (
-          <button
-            style={{ marginRight: "30px" }}
-            className={"NavBtn"}
-            onClick={(e) => {
-              setUserN("Recruiter");
-              localStorage.setItem("rec", "Recruiter");
-              props.dispatch(setUser("Recruiter"));
-            }}
-          >
-            Want to hire?
-          </button>
-        ) : (
-          ""
-        )}
-        {user === "Recruiter" ? (
-          <button
-            style={{ marginRight: "30px" }}
-            className={"NavBtn"}
-            onClick={(e) => {
-              setUserN("Candidate");
-              localStorage.setItem("rec", "Candidate");
-              props.dispatch(setUser("Candidate"));
-            }}
-          >
-            Want a Job?
-          </button>
-        ) : (
-          ""
-        )}
-        <button className={"NavBtn"} onClick={handleMethod}>
-          {!signup ? "Sign Up" : "Login"}
+      <div className="Div2">
+        <button
+          className="NavBtn"
+          style={{ marginRight: "30px", color: "white" }}
+          onClick={(e) => setSection("Home")}
+        >
+          Home
         </button>
+        <Dropdown >
+          <Dropdown.Toggle
+            variant="dark"
+            id="dropdown-basic2"
+            style={{
+              backgroundColor: "transparent",
+              outline: "none",
+              border: "none",
+              fontSize: "19.2px",
+            }}
+          >
+            Login/Sign Up As
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item
+              onClick={(e) => {
+                setSection("Login");
+                localStorage.setItem("rec", "Candidate");
+                setUserN("Candidate");
+              }}
+            >
+              Candidate
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={(e) => {
+                setSection("Login");
+                localStorage.setItem("rec", "Recruiter");
+                setUserN("Recruiter");
+              }}
+            >
+              Recruiter
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
       <div className="Div1">
-        <div>
-          <h1 className={"Tagline"}>WELCOME TO THE PROFESSIONAL COMMUNITY</h1>
-
-          <form
-            className={"Box"}
-            id="box"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!signup) {
-                handleLoginClick();
-              } else {
-                handleSignupClick();
-              }
-            }}
-          >
-            {signup ? (
+        {" "}
+        {section === "Home" ? (
+          <>
+            
+            <span className="Company">Recrutio</span>
+            <h1 className={"Tagline"}>WELCOME TO THE PROFESSIONAL COMMUNITY</h1>
+            <h2 className="Intro">
+              A social media platform for professionals.
+              <br />
+            </h2>
+            <p className="Intro">
+              Job seekers can post their work and apply for the jobs on the
+              platform. <br />
+              The recruiters can make the job posts and hire the suitable
+              employee for their company.
+            </p>
+          </>
+        ) : (
+          <>
+            <form
+              className={"Box"}
+              id="box"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (section === "Login") {
+                  handleLoginClick();
+                } else {
+                  handleSignupClick();
+                }
+              }}
+            >
+              {section === "Signup" ? (
+                <input
+                  placeholder="USERNAME"
+                  className={"Input1"}
+                  required
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    setShow(false);
+                  }}
+                />
+              ) : null}
               <input
-                placeholder="USERNAME"
+                placeholder="EMAIL"
                 className={"Input1"}
                 required
+                type="email"
                 onChange={(e) => {
-                  setUsername(e.target.value)
-                  setShow(false)
+                  setEmail(e.target.value);
+                  setShow(false);
                 }}
-                autoFocus
               />
-            ) : null}
-            <input
-              placeholder="EMAIL"
-              className={"Input1"}
-              required
-              type="email"
-              autoFocus
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setShow(false)
-              }}
-            />
-            <input
-              placeholder="PASSWORD"
-              className={"Input1"}
-              required
-              type="password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setShow(false)
-              }}
-            />
-            <button className={"LoginBtn"} type="submit">
-              {!signup ? "Login" : "Sign Up"}
-            </button>
-            <Alert
-              variant="dark"
-              onClose={() => setShow(false)}
-              dismissible
-              show={show}
-              style={{ borderRadius: "10px" }}
-              transition={false}
-            >
-              {msg}
-            </Alert>
-          </form>
-        </div>
+              <input
+                placeholder="PASSWORD"
+                className={"Input1"}
+                required
+                type="password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setShow(false);
+                }}
+              />
+              <button className={"LoginBtn"} type="submit" disabled = {status !== ('Login' || 'Sign Up')} >
+                {status}
+              </button>
+              {section === "Login" ? (
+                <p style={{color: 'white'}} >
+                  New User?{" "}
+                  <button
+                    onClick={(e) => {
+                      setStatus('Signup')
+                      setSection('Signup')} }
+                    style={{
+                      backgroundColor: "transparent",
+                      outline: "none",
+                      border: "none",
+                      fontWeight: 'bold',
+                      color: 'white'
+                    }}
+                  >
+                    Sign Up as {user}
+                  </button>
+                </p>
+              ) : (
+                <p style={{color: 'white'}} >
+                  Already have an account?{" "}
+                  <button
+                    onClick={(e) => {
+                      setStatus('Login')
+                      setSection('Login') }}
+                    style={{
+                      backgroundColor: "transparent",
+                      outline: "none",
+                      border: "none",
+                      fontWeight: 'bold',
+                      color: 'white'
+                    }}
+                  >
+                    Login as {user}
+                  </button>
+                </p>
+              )}
+              <Alert
+                variant="dark"
+                onClose={() => setShow(false)}
+                dismissible
+                show={show}
+                style={{ borderRadius: "10px" }}
+                transition={false}
+              >
+                {msg}
+              </Alert>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );
