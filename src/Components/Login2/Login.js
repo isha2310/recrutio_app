@@ -284,7 +284,7 @@ const Login = (props) => {
                   setShow(false);
                 }}
               />
-              <button className={"LoginBtn"} type="submit" disabled = {status !== ('Login' || 'Sign Up')} >
+              <button className={"LoginBtn"} type="submit" disabled = {!(status === 'Login' || status === 'Sign Up')} >
                 {status}
               </button>
               {section === "Login" ? (
