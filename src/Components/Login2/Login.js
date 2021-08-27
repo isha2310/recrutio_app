@@ -292,7 +292,7 @@ const Login = (props) => {
                   New User?{" "}
                   <button
                     onClick={(e) => {
-                      setStatus('Signup')
+                      setStatus('Sign Up')
                       setSection('Signup')} }
                     style={{
                       backgroundColor: "transparent",
