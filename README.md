@@ -22,4 +22,4 @@ NodeJS backend @https://github.com/isha2310/Recrutio-API
 - Run `yarn` or `npm i` to install the required dependencies
 - Create your env file `REACT_APP_KEY` = Google search api key, `REACT_APP_CX` = Google search api cx.
 - And finally run `yarn` or `npm start` to start the development server locally
-- Visit http://localhost:8080
+- Visit http://localhost:3000
