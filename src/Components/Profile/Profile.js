@@ -18,11 +18,11 @@ import { useHistory } from "react-router-dom";
 
 const Profile = (props) => {
   const [field, setField] = useState(0);
-  const [skill, setSkill] = useState("");
+  const [skill, setSkill] = useState([]);
   const [view, setView] = useState("Profile");
   const [posts, setPosts] = useState([]);
   let user = localStorage.getItem("rec");
-  let history = useHistory()
+  let history = useHistory();
 
   useEffect(() => {
     let user = localStorage.getItem("rec");
@@ -40,7 +40,7 @@ const Profile = (props) => {
         setPosts([...props.candidate.posts]);
       }
     } else {
-      history.push('/timeline_r')
+      history.push("/timeline_r");
     }
   }, [props.candidate.posts, props.candidate.candidate.snap, history]);
 
